@@ -11,53 +11,35 @@ import { toast } from 'react-toastify';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { useEffect, useState } from 'react';
 import { courseService } from '../../../Services/apiServices/course/courseServices';
-import { genderService } from '../../../Services/apiServices/common/gender/genderService';
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup';
-
+import { SFormCover } from '../style/style';
 const schema = yup.object().shape({
     firstName: yup.string().required("Name is required !"),
     courseId: yup.number().min(1, "Please select course !").required("This Field is required !").typeError("Please select course !"),
+    emailAddress: yup.string().email("Invalid").required("Email is required !"),
+    phoneNumber: yup.string().min(10,"Minimum 10 digit").max(15,"Maximum 15 digit").required()
+
 })
 
 export default function CreateStudent() {
-    const { register, handleSubmit, control, formState: { errors, isSubmitting }, setValue } = useForm({
+    const { register, handleSubmit, control, formState: { errors, isSubmitting } } = useForm({
         resolver: yupResolver(schema)
     });
 
-    // const [initialValue, setInitialValue] = useState({
-    //     firstName: '',
-    //     lastName: '',
-    //     birthDate: '',
-    //     courseId: '',
-    //     genderId: ''
-    // })
-
-    // const handleChange = (e) => {
-    //     const { name, value } = e.target;
-    //     setInitialValue({
-    //         ...initialValue,
-    //         [name]: value
-    //     })
-    // }
     const navigate = useNavigate();
     const [courseList, setCourseList] = useState([]);
-    const [genderList, setGenderList] = useState([]);
-    const [date, setDate] = useState("")
-    console.log(date, "date");
 
     const onSubmit = async (data) => {
-
         try {
-            debugger
             if (isSubmitting) return;
             const response = await createStudentService(data);
-            if (response.status === true) {
+            if (response.status) {
                 toast.success(response.message, {
                     autoclose: 1000,
                 })
-                navigate("/Student")
-            } else if (response.status === false) {
+                navigate("/Admin/Student")
+            } else {
                 toast.error(response.message, {
                     autoclose: 1000,
                 })
@@ -77,21 +59,16 @@ export default function CreateStudent() {
     useEffect(() => {
         let courseData = () => {
             courseService().then((response) => {
-                setCourseList(response.data)
+                if(response.status){
+
+                    setCourseList(response.data)
+                }
             })
         }
         courseData()
     }, [])
 
-    //Fetch Gender List
-    useEffect(() => {
-        let genderData = () => {
-            genderService().then((response) => {
-                setGenderList(response.data)
-            })
-        }
-        genderData()
-    }, [])
+
 
 
     return (
@@ -99,21 +76,17 @@ export default function CreateStudent() {
             <Container maxWidth="xl">
                 <Toolbar sx={{ flexDirection: `row`, borderRadius: '20px', justifyContent: "space-between", padding: '10px', alignItems: 'flex-start', background: 'white', marginBottom: '10px' }}>
                     <Typography variant='h6' > + Add Student</Typography>
-
                 </Toolbar >
-                <Box sx={{ bgcolor: 'white', padding: '10px', marginTop: '15px', borderRadius: '20px' }}>
-                    <Box component="form" sx={{ padding: `10px` }} onSubmit={handleSubmit(onSubmit)} >
+                <SFormCover>
+                    <form onSubmit={handleSubmit(onSubmit)} >
                         <FormGroup sx={{ display: `flex`, flexDirection: `row` }}>
                             <SInputField>
                                 <FormControl>
                                     <TextField
-
                                         label="First Name"
-                                        // value={initialValue.firstName}
                                         {...register('firstName')}
                                         error={errors?.firstName}
                                         helperText={errors?.firstName?.message}
-                                    // onChange={handleChange}
                                     />
                                 </FormControl>
                             </SInputField>
@@ -121,10 +94,7 @@ export default function CreateStudent() {
                                 <FormControl>
                                     <TextField
                                         label="Last Name"
-                                        // value={initialValue.lastName}
                                         {...register('lastName')}
-                                    // onChange={handleChange}
-
                                     />
                                 </FormControl>
                             </SInputField>
@@ -132,13 +102,20 @@ export default function CreateStudent() {
                                 <Controller
                                     control={control}
                                     name='birthDate'
-                                    error
                                     render={({ field: { onChange } }) => (
                                         <DatePicker
-                                            onChange={onChange}
+                                            onChange={(data) => onChange(new Date(data).toLocaleDateString('fr-CA', {
+                                                year: 'numeric',
+                                                month: 'numeric',
+                                                day: 'numeric'
+                                            }))
+                                            }
                                             label='Birth Date'
                                             disableFuture
                                             format='YYYY/MM/DD'
+                                            error
+                                            
+
                                         ></DatePicker>
                                     )} />
 
@@ -154,8 +131,6 @@ export default function CreateStudent() {
                                         label="Course"
                                         error={errors?.courseId}
                                         {...register("courseId")}
-                                    // value={initialValue.courseId}
-                                    // onChange={handleChange}
                                     >
 
                                         {courseList.map((item, index) => (
@@ -172,25 +147,46 @@ export default function CreateStudent() {
                                 <FormControl fullWidth>
                                     <InputLabel id="gender">Gender</InputLabel>
                                     <Select
-
                                         labelId="gender"
                                         id="gender-select"
                                         label="Gender"
                                         {...register("genderId")}
-                                    // value={initialValue.genderId}
-                                    // onChange={handleChange}
                                     >
-                                        {genderList.map((item, index) => (
-                                            <MenuItem key={index} value={item.id}>
-                                                {item.name}
-                                            </MenuItem>
-                                        ))}
+
+                                        <MenuItem key={1} value={1}>Male</MenuItem>
+                                        <MenuItem key={2} value={2}>Female</MenuItem>
+
                                     </Select>
+                                </FormControl>
+                            </SInputField>
+
+                            <SInputField>
+                                <FormControl>
+                                    <TextField
+                                        label="Email"
+                                        {...register('emailAddress')}
+                                        error={errors?.emailAddress}
+                                        helperText={errors?.emailAddress?.message}
+                                    />
+                                </FormControl>
+                            </SInputField>
+                            <SInputField>
+                                <FormControl>
+                                    <TextField
+                                        type='text'
+                                        InputProps={{
+                                            endAdornment: null,
+                                        }}
+                                        label="Phone No."
+                                        {...register('phoneNumber')}
+                                        error={errors?.phoneNumber}
+                                        helperText={errors?.phoneNumber?.message}
+                                    />
                                 </FormControl>
                             </SInputField>
                         </FormGroup>
 
-                        <Stack direction="row" spacing={2} sx={{ margin: `20px 20px 20px 5px` }}>
+                        <div className='flex flex-row m-2 gap-3'>
                             <Link to={"/Admin/Student"}>
                                 <Button variant="outlined" color='error' endIcon={<IoIosArrowRoundBack />}>
                                     Back
@@ -199,9 +195,9 @@ export default function CreateStudent() {
                             <Button type="submit" variant="contained" color="success" size='small'>
                                 {isSubmitting ? "Submitting" : "Submit"}
                             </Button>
-                        </Stack>
-                    </Box>
-                </Box>
+                        </div>
+                    </form>
+                </SFormCover>
             </Container>
         </>
     );

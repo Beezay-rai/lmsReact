@@ -102,7 +102,7 @@ export default function Book() {
     return (<>
         <Toolbar sx={{ flexDirection: `row`, borderRadius: '20px', justifyContent: "space-between", padding: '10px', alignItems: 'flex-start', background: 'white', marginBottom: '10px' }}>
             <Typography variant='h5' >Book</Typography>
-            <Link to={"/Book/Create"}>
+            <Link to={"/Admin/Book/Create"}>
                 <Button variant="contained" color="success" sx={{ marginBottom: `20px` }}>
                     Add
                 </Button>
@@ -160,12 +160,12 @@ export default function Book() {
                                         {(item?.id)}
                                     </TableCell>
                                     <TableCell>
-                                        {item?.name}
+                                        {item?.bookName}
                                     </TableCell>
 
 
                                     <TableCell>
-                                        <Link to={`/Book/Edit/${item?.id}`}>
+                                        <Link to={`Admin/Book/Edit/${item?.id}`}>
                                             <Button sx={{ margin: "4px" }} variant="contained" >
                                                 <BsPencilSquare></BsPencilSquare>
                                             </Button>

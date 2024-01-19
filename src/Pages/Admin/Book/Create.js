@@ -2,7 +2,7 @@ import * as React from 'react';
 import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
-import { Button, FormControl, FormGroup, InputLabel, MenuItem, Select, Stack, TextField } from '@mui/material';
+import { Button, FormControl, FormGroup, InputLabel, MenuItem, Select, Stack, TextField, Toolbar, Typography } from '@mui/material';
 import { SInputField } from '../../../Components/styles/Styles';
 import { IoIosArrowRoundBack } from 'react-icons/io'
 import { Link, useNavigate } from 'react-router-dom';
@@ -11,8 +11,10 @@ import { toast } from 'react-toastify';
 import { useState, useEffect } from 'react';
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from 'yup';
-import { bookService, createBookService } from '../../../Services/apiServices/book/bookServices';
+import { SFormCover } from '../style/style';
 
+import { bookService, createBookService } from '../../../Services/apiServices/book/bookServices';
+import { categoryService } from '../../../Services/apiServices/category/categoryServices';
 const schema = yup.object({
     name: yup.string().required("This field is required"),
     authorName: yup.string().required("This field is required"),
@@ -23,10 +25,6 @@ const schema = yup.object({
 export default function CreateBook() {
     const { register, control, handleSubmit, formState: { errors, isSubmitting } } = useForm({
         resolver: yupResolver(schema),
-        defaultValues: {
-            name: '',   
-            authorName: ''
-        }
     });
 
     const navigate = useNavigate();
@@ -35,7 +33,7 @@ export default function CreateBook() {
     const [categoryList, setCategoryList] = useState([]);
     useEffect(() => {
         let categoryData = () => {
-            bookService().then((response) => {
+            categoryService().then((response) => {
                 try {
                     if (response.status === true) {
                         setCategoryList(response.data);
@@ -47,12 +45,13 @@ export default function CreateBook() {
         categoryData();
     }, [])
 
-    const handleSelectChange = (event)=>{
+    const handleSelectChange = (event) => {
         setCategoryList(event.target.value)
     }
 
     //Post Form
     const onSubmit = async (data) => {
+        debugger
         try {
             if (isSubmitting) return;
             const response = await createBookService(data);
@@ -75,10 +74,12 @@ export default function CreateBook() {
     }
     return (
         <>
-            <CssBaseline />
             <Container maxWidth="xl">
-                <h2>Add Book</h2>
-                <Box sx={{ bgcolor: 'white', padding: '10px', marginTop: '15px', borderRadius: '20px' }}>
+                <Toolbar sx={{ flexDirection: `row`, borderRadius: '20px', justifyContent: "space-between", padding: '10px', alignItems: 'flex-start', background: 'white', marginBottom: '10px' }}>
+                    <Typography variant='h5' > + Add Book</Typography>
+
+                </Toolbar >
+                <SFormCover>
                     <Box component="form" sx={{ padding: `10px` }} onSubmit={handleSubmit(onSubmit)} >
                         <FormGroup sx={{ display: `flex`, flexDirection: `row` }}>
                             <SInputField>
@@ -117,7 +118,7 @@ export default function CreateBook() {
                                     >
                                         {categoryList.map((item, index) => (
                                             <MenuItem key={index} value={item.id}>
-                                                {item.name}
+                                                {item.categoryName}
                                             </MenuItem>
                                         ))}
                                     </Select>
@@ -130,7 +131,7 @@ export default function CreateBook() {
                         </FormGroup>
 
                         <Stack direction="row" spacing={2} sx={{ margin: `20px 20px 20px 5px` }}>
-                            <Link to={"/Book"}>
+                            <Link to={"/Admin/Book"}>
                                 <Button variant="outlined" color='error' endIcon={<IoIosArrowRoundBack />}>
                                     Back
                                 </Button>
@@ -140,7 +141,7 @@ export default function CreateBook() {
                             </Button>
                         </Stack>
                     </Box>
-                </Box>
+                </SFormCover>
             </Container>
         </>
     );

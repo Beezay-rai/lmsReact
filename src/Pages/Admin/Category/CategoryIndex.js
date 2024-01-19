@@ -159,7 +159,7 @@ export default function Category() {
                                         {(item?.id)}
                                     </TableCell>
                                     <TableCell>
-                                        {item?.name}
+                                        {item?.categoryName}
                                     </TableCell>
 
 
