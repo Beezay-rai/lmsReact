@@ -71,7 +71,7 @@ export default function Book() {
         border: '1px solid silver',
         outline: "none",
         borderRadius: '10px',
-        padding: "30px"
+        padding: "30px",
     };
 
 

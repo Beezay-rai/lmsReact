@@ -1,6 +1,6 @@
 import axios from "axios";
 import { store } from '../redux/store'
-const baseUrl = "https://localhost:7098/api";
+const baseUrl = "https://ourlibraryapi.azurewebsites.net/api";
 
 export const urls = {
     courseUrl: `${baseUrl}/Admin/Course`,
