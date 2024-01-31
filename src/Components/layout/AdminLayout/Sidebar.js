@@ -56,7 +56,7 @@ function Sidebar(props) {
     }
 
     return (
-        <>
+        <div className='hidden xl:block '>
 
             <Drawer
                 variant="permanent"
@@ -65,6 +65,7 @@ function Sidebar(props) {
                     flexShrink: 0,
                     [`& .MuiDrawer-paper`]: { width: drawerWidth, boxSizing: 'border-box' },
                 }}
+
             >
                 <Toolbar />
                 <Box sx={{ overflow: 'hidden' }}>
@@ -196,7 +197,7 @@ function Sidebar(props) {
             </Modal>
             {/* Modal popup End */}
 
-        </ >
+        </div >
     )
 }
 

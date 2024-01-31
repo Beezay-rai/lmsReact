@@ -80,7 +80,7 @@ export default function UserList() {
     return (<>
         <Toolbar sx={{ flexDirection: `row`, borderRadius: '20px', justifyContent: "space-between", padding: '10px', alignItems: 'flex-start', background: 'white', marginBottom: '10px' }}>
             <Typography variant='h5' >User's List</Typography>
-            <Link to={"/UserList/Create"}>
+            <Link to={"/Admin/UserList/Create"}>
                 <Button variant="contained" color="success" sx={{ marginBottom: `20px` }}>
                     Add
                 </Button>

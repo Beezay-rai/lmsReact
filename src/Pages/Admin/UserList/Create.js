@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
-import { Button, FormControl, FormGroup, InputLabel, MenuItem, Select, Stack, TextField, Toolbar, Typography } from '@mui/material';
+import { Button, FormControl, FormGroup, FormHelperText, Formhelpertext, InputLabel, MenuItem, Select, Stack, TextField, Toolbar, Typography } from '@mui/material';
 import { SInputField } from '../../../Components/styles/Styles';
 import { IoIosArrowRoundBack } from 'react-icons/io'
 import { Link, useNavigate } from 'react-router-dom';
@@ -11,54 +11,35 @@ import { useEffect, useState } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { roleService } from '../../../Services/apiServices/common/role/roleService';
 import { SignUpService, signUp } from '../../../Services/apiServices/auth/signUpService';
-
+import * as yup from 'yup';
 export default function CreateUser() {
-    // const schema = yup
-    //     .object()
-    //     .shape({
-    //         firstName:yup.string().required("This field is required")
-    //     });
+    
+    const  schema = yup.object().shape({
+        firstName:yup.string().required('Name field is required !'),
+        email:yup.string().email("Invalid email !").required("Email is required !"),
+        password:yup.string().required('Password is required !').min(8,"Minimum 8 character is required !"),
+        confirmPassword:yup.string().oneOf([yup.ref('password'),null],'Passwords must match !').required('Confirm password is required '),
+        role:yup.string().required("Select one")
 
-    const { register, handleSubmit, formState: { errors, isSubmitting }, setValue } = useForm({
-       
-        defaultValues: {
-            firstName: '',
-            lastName: '',
-            email: '',
-            password: '',
-            confirmPassword: '',
-            role:'',
 
-        }
+    })
+
+    const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm({
+        resolver:yupResolver(schema)
     });
+    const navigate = useNavigate();
 
     //For Role Selectlist
     const [roleList,SetRoleList] = useState([]);
     useEffect(()=>{
-        let abc = roleService().then((response)=>{
+         roleService().then((response)=>{
             SetRoleList(response.data)
         })
-
-        
     },[])
 
-    const [initialValue, setInitialValue] = useState({
-        firstName: '',
-        lastName: '',
-        email: '',
-        password: '',
-        confirmPassword: '',
-        role:''
-    })
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setInitialValue({
-            ...initialValue,
-            [name]: value
-        })
-    }
-    const navigate = useNavigate();
+
+ 
 
     const onSubmit = async (data) => {
         try {
@@ -102,33 +83,28 @@ export default function CreateUser() {
                                 <FormControl>
                                     <TextField
                                         label="First Name"
-                                        error={errors.firstName}
-                                        value={initialValue.firstName}
-                                        {...register('firstName', { required: true })}
-                                        onChange={handleChange}
-                                        helperText={errors?.firstName?.message}
+                                        {...register('firstName')}
+                                        error={errors?.firstName}
                                     />
+                                     <FormHelperText error={errors?.firstName} > {errors?.firstName?.message}</FormHelperText>
                                 </FormControl>
                             </SInputField>
                             <SInputField>
                                 <FormControl>
                                     <TextField
                                         label="Last Name"
-                                        value={initialValue.lastName}
                                         {...register('lastName')}
-                                        onChange={handleChange}
-
+                                        error={errors?.lastName}
                                     />
+                                     <FormHelperText error={errors?.lastName} > {errors?.lastName?.message}</FormHelperText>
                                 </FormControl>
                             </SInputField>
                             <SInputField>
                                 <FormControl>
                                     <TextField
                                         label="Email"
-                                        value={initialValue.email}
                                         {...register('email')}
-                                        onChange={handleChange}
-
+                                        error={errors?.email}
                                     />
                                 </FormControl>
                             </SInputField>
@@ -136,38 +112,37 @@ export default function CreateUser() {
                                 <FormControl>
                                     <TextField
                                         label="Password"
-                                        value={initialValue.password}
                                         {...register('password')}
-                                        onChange={handleChange}
                                         type='password'
+                                        error={errors?.password}
 
                                     />
+                                    <FormHelperText error={errors?.password} > {errors?.password?.message}</FormHelperText>
+
                                 </FormControl>
                             </SInputField>
                             <SInputField>
                                 <FormControl>
                                     <TextField
                                         label="Confirm Password"
-                                        value={initialValue.confirmPassword}
                                         {...register('confirmPassword')}
-                                        onChange={handleChange}
                                         type='password'
+                                        error={errors?.confirmPassword}
 
                                     />
+                                    <FormHelperText error={errors?.confirmPassword} > {errors?.confirmPassword?.message}</FormHelperText>
+
                                 </FormControl>
                             </SInputField>
                             <SInputField>
                                 <FormControl fullWidth>
-                                    <InputLabel id="Role">Role</InputLabel>
+                                    <InputLabel id="Role"   error={errors?.role}> Role </InputLabel>
                                     <Select
-                                        required
                                         labelId="Role"
                                         id="role-select"
                                         label="Role"
                                         {...register("role")}
-                                        value={initialValue.role}
-                                        onChange={handleChange}
-
+                                        error={errors?.role}
                                     >
                                         {roleList.map((item, index) => (
                                             <MenuItem key={index} value={item.name}>
@@ -175,6 +150,7 @@ export default function CreateUser() {
                                             </MenuItem>
                                         ))}
                                     </Select>
+                                    <FormHelperText error={errors?.role} > {errors?.role?.message}</FormHelperText>
                                 </FormControl>
                             </SInputField>
                          
@@ -182,7 +158,7 @@ export default function CreateUser() {
                         </FormGroup>
 
                         <Stack direction="row" spacing={2} sx={{ margin: `20px 20px 20px 5px` }}>
-                            <Link to={"/UserList"}>
+                            <Link to={"/Admin/UserList"}>
                                 <Button variant="outlined" color='error' endIcon={<IoIosArrowRoundBack />}>
                                     Back
                                 </Button>
