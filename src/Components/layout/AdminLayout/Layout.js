@@ -26,7 +26,7 @@ import { Link } from "react-router-dom";
 import { PiChatDotsDuotone } from "react-icons/pi";
 import MenuIcon from "@mui/icons-material/Menu";
 import NotificationsIcon from "@mui/icons-material/Notifications";
-
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 export default function Layout({ children }) {
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const [drawerOpen,setDrawerOpen] = useState(false);
@@ -36,12 +36,16 @@ export default function Layout({ children }) {
     setDrawerOpen(!drawerOpen)
   }
 
+  const drawerWidth="250px";
+  const navBarHeight ="60px";
+
 
   return (
     <>
-      <AppBar sx={{zIndex:(theme)=>theme.zIndex.drawer + 1 }} >
-        <Toolbar className="j justify-between">
-          <Box className="flex ">
+ 
+      <Box className="navbar" sx={{height:navBarHeight}}>
+        <Box className="flex justify-between px-5 " sx={{backgroundColor:"#1976d2",color:"white"}} >
+          <Box  className="flex " sx={{alignItems:"center"}} >
             <IconButton
               size="large"
               edge="start"
@@ -50,9 +54,11 @@ export default function Layout({ children }) {
               sx={{ mr: 2 }}
               onClick={handleSideBar}
             >
-              <MenuIcon />
+              {drawerOpen?<ArrowBackIcon/>:<MenuIcon/>}
             </IconButton>
+            <Link to={'/'}>
             <Typography variant="h6">LMS</Typography>
+            </Link>
           </Box>
 
           <Box>
@@ -66,12 +72,14 @@ export default function Layout({ children }) {
               <Avatar src={ava}></Avatar>
             </IconButton>
           </Box>
-        </Toolbar>
-      </AppBar>
+        </Box>
+      </Box>
 
-      <Sidebar sideBarOpen={drawerOpen} />
+
+      <Sidebar sideBarOpen={drawerOpen} drawerWidth={drawerWidth} navBarHeight={navBarHeight}  />
       <Box
         component="main"
+        sx={{marginTop:"20px",marginLeft:drawerOpen? drawerWidth:"0px"   }}
       >
         {children}
       </Box>

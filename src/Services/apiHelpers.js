@@ -22,6 +22,7 @@ export const authApi = async (method, url, data) => {
 }
 
 export const signUpApi = async(method,url,data)=>{
+    debugger
     let response = await axios({
         method,
         url:`${baseUrl}${url}`,

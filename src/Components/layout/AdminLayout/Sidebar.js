@@ -21,7 +21,7 @@ import { useDispatch } from "react-redux";
 import { logout } from "../../../redux/userDetail";
 import zIndex from "@mui/material/styles/zIndex";
 
-function Sidebar({ sideBarOpen }) {
+function Sidebar({ sideBarOpen,drawerWidth ,navBarHeight}) {
   const modalStyle = {
     position: "absolute",
     top: "50%",
@@ -53,15 +53,16 @@ function Sidebar({ sideBarOpen }) {
   const handleMainListOpen = () => {
     setMainListOPen(!mainListOpen);
   };
-  const drawerWidth = 250;
   return (
     <>
       <Drawer
         variant="persistent"
         sx={{
           width: drawerWidth,
+        
           "& .MuiDrawer-paper": {
             width: drawerWidth,
+            marginTop:navBarHeight,
           },
         }}
         open={sideBarOpen}
