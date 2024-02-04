@@ -22,13 +22,16 @@ import CreateTransaction from "./Pages/Admin/Transaction/Create";
 import Transaction from "./Pages/Admin/Transaction/TransactionIndex";
 import EditTransaction from "./Pages/Admin/Transaction/Edit";
 import Home from "./Pages/Admin/Home/Home";
-
+import Error from "./Pages/shared/error";
 
 export default function Gateway() {
     return (
         <Routes>
             <Route path="/login" element={<Login />} />
             <Route path="/SignUp" element={<SignUp />} />
+            <Route path="/Error" element={<Error />} />
+            <Route exact path="/*" element={<Error/>} />
+
             <Route element={<PrivateRoute />}>
                 <Route path="/" element={<Home />} />
                 {/* SetUser */}
@@ -60,7 +63,6 @@ export default function Gateway() {
                 <Route exact path="/Admin/Transaction/Create" element={<CreateTransaction />} />
                 <Route exact path="/Admin/Transaction/Edit/:id" element={<EditTransaction />} />
 
-                <Route exact path="/*" element={<div> Nothing </div>} />
             </Route>
         </Routes>
     )

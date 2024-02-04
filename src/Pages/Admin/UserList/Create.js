@@ -72,7 +72,7 @@ export default function CreateUser() {
         toast.success(response.message, {
           autoclose: 1000,
         });
-        navigate("/UserList");
+        navigate("/Admin/UserList");
       } else if (response.status === false) {
         toast.error(response.message, {
           autoclose: 1000,

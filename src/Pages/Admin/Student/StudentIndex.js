@@ -182,7 +182,7 @@ export default function StudentIndex() {
                 </Table>
             </TableContainer>
             <TablePagination
-                rowsPerPageOptions={[10, 25, 100]}
+                rowsPerPageOptions={[10, 15, 20]}
                 component="div"
                 count={apiData.length}
                 rowsPerPage={rowsPerPage}

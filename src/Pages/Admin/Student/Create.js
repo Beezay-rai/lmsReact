@@ -18,7 +18,9 @@ const schema = yup.object().shape({
     firstName: yup.string().required("Name is required !"),
     courseId: yup.number().min(1, "Please select course !").required("This Field is required !").typeError("Please select course !"),
     emailAddress: yup.string().email("Invalid").required("Email is required !"),
-    phoneNumber: yup.string().min(10,"Minimum 10 digit").max(15,"Maximum 15 digit").required()
+    phoneNumber: yup.string().min(10,"Minimum 10 digit").max(15,"Maximum 15 digit").required(),
+    birthDate:yup.date().required("Please select birth date !"),
+    genderId: yup.number().min(1, "Please select gender !").required("This Field is required !").typeError("Please select gender !"),
 
 })
 
@@ -113,10 +115,10 @@ export default function CreateStudent() {
                                             label='Birth Date'
                                             disableFuture
                                             format='YYYY/MM/DD'
-                                            error
                                             
 
                                         ></DatePicker>
+                                        
                                     )} />
 
                                 <FormHelperText error>{errors?.birthDate?.message} </FormHelperText>
@@ -145,11 +147,12 @@ export default function CreateStudent() {
 
                             <SInputField>
                                 <FormControl fullWidth>
-                                    <InputLabel id="gender">Gender</InputLabel>
+                                    <InputLabel    error={errors?.courseId} id="gender">Gender</InputLabel>
                                     <Select
                                         labelId="gender"
                                         id="gender-select"
                                         label="Gender"
+                                        error={errors?.genderId}
                                         {...register("genderId")}
                                     >
 
@@ -157,6 +160,7 @@ export default function CreateStudent() {
                                         <MenuItem key={2} value={2}>Female</MenuItem>
 
                                     </Select>
+                                    <FormHelperText error> {errors?.genderId?.message}</FormHelperText>
                                 </FormControl>
                             </SInputField>
 

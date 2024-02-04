@@ -8,6 +8,7 @@ import {
   Button,
   Collapse,
   Divider,
+  Fade,
   IconButton,
   List,
   ListItem,
@@ -46,6 +47,7 @@ export default function Layout({ children }) {
       <Box className="navbar" sx={{height:navBarHeight}}>
         <Box className="flex justify-between px-5 " sx={{backgroundColor:"#1976d2",color:"white"}} >
           <Box  className="flex " sx={{alignItems:"center"}} >
+       
             <IconButton
               size="large"
               edge="start"
@@ -54,8 +56,10 @@ export default function Layout({ children }) {
               sx={{ mr: 2 }}
               onClick={handleSideBar}
             >
-              {drawerOpen?<ArrowBackIcon/>:<MenuIcon/>}
+              {drawerOpen?<ArrowBackIcon />:<MenuIcon/>}
             </IconButton>
+           
+           
             <Link to={'/'}>
             <Typography variant="h6">LMS</Typography>
             </Link>

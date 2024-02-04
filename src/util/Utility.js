@@ -15,7 +15,7 @@ export const PrivateRoute =({component:Component}) =>{
             ) : (<UserLayout />)
 
         ) : (
-            <Navigate to="/login" />
+            <Navigate to="/login"/>
         )
     )
 

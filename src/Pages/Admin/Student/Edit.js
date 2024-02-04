@@ -32,15 +32,15 @@ export default function EditStudent() {
         fetchData()
     }, [])
 
-    //Faculty List Fetch
-    const[facultyList,setFacultyList] = useState([])
+    //Course List Fetch
+    const[courseList,setCourseList] = useState([])
     useEffect(()=>{
-        let facultyData =()=>{
+        let courseData =()=>{
             courseService().then((response)=>{
-                setFacultyList(response.data)
+                setCourseList(response.data)
             })
         }
-        facultyData()
+        courseData()
     },[apiData])
 
 
@@ -64,7 +64,7 @@ export default function EditStudent() {
         firstName: "",
         lastName:"",
         birthDate:"",
-        facultyId:0,
+        courseId:0,
         genderId:0
     });
 
@@ -74,7 +74,7 @@ export default function EditStudent() {
             firstName: apiData?.firstName || "",
             lastName:apiData?.lastName || "",
             birthDate:apiData?.birthDate || "",
-            facultyId:apiData?.facultyId || "",
+            courseId:apiData?.courseId || "",
             genderId:apiData?.genderId || "",
         });
     }, [apiData]);
@@ -84,7 +84,7 @@ export default function EditStudent() {
         setValue("firstName", initialValue.firstName);
         setValue("lastName", initialValue.lastName);
         setValue("genderId", initialValue.genderId);
-        setValue("facultyId", initialValue.facultyId);
+        setValue("courseId", initialValue.courseId);
     }, [initialValue]);
 
 
@@ -155,6 +155,7 @@ export default function EditStudent() {
                                     label='Birth Date'
                                     format='YYYY-MM-DD'
                                     name="birthDate"
+                                    disableFuture
                                     onChange={handleBirthDate}
                                     value={initialValue?.birthDate ? dayjs(initialValue?.birthDate) : dayjs()}
                                 />
@@ -163,18 +164,18 @@ export default function EditStudent() {
 
                             <SInputField>
                                 <FormControl fullWidth>
-                                    <InputLabel id="faculty">Faculty</InputLabel>
+                                    <InputLabel id="Course">Course</InputLabel>
                                     <Select
-                                        labelId="faculty"
-                                        id="faculty-select"
-                                        label="Faculty"
-                                        {...register("facultyId")}
-                                        value={initialValue.facultyId}
-                                        onChange={(e)=>setInitialValue({...initialValue,facultyId:e.target.value})}
+                                        labelId="Course"
+                                        id="Course-select"
+                                        label="Course"
+                                        {...register("courseId")}
+                                        value={initialValue.courseId}
+                                        onChange={(e)=>setInitialValue({...initialValue,courseId:e.target.value})}
                                     >
-                                        {facultyList.map((item, index) => (
+                                        {courseList.map((item, index) => (
                                             <MenuItem key={index} value={item.id}>
-                                                {item.name}
+                                                {item.courseName}
                                             </MenuItem>
                                         ))}
 
