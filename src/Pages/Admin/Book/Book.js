@@ -16,6 +16,7 @@ import { toast } from 'react-toastify';
 
 
 
+
 export default function Book() {
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -165,7 +166,7 @@ export default function Book() {
 
 
                                     <TableCell>
-                                        <Link to={`Admin/Book/Edit/${item?.id}`}>
+                                        <Link to={`Edit/${item?.id}`}>
                                             <Button sx={{ margin: "4px" }} variant="contained" >
                                                 <BsPencilSquare></BsPencilSquare>
                                             </Button>

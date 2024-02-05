@@ -97,7 +97,7 @@ export default function EditCourse() {
 
             <Container maxWidth="xl">
                 <Toolbar sx={{ flexDirection: `row`, borderRadius: '20px', justifyContent: "space-between", padding: '10px', alignItems: 'flex-start', background: 'white', marginBottom: '10px' }}>
-                    <Typography variant='h5' >Edit Course</Typography>
+                    <Typography variant='h5' >Update Course</Typography>
 
                 </Toolbar >
                 <Box sx={{ bgcolor: 'white', padding: '10px', marginTop: '15px', borderRadius: '20px' }}>
