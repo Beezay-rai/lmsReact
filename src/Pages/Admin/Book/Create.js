@@ -4,11 +4,13 @@ import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import {
   Button,
+  Chip,
   FormControl,
   FormGroup,
   FormHelperText,
   InputLabel,
   MenuItem,
+  OutlinedInput,
   Select,
   Stack,
   TextField,
@@ -31,6 +33,7 @@ import {
   createBookService,
 } from "../../../Services/apiServices/book/bookServices";
 import { categoryService } from "../../../Services/apiServices/category/categoryServices";
+import { useTheme } from "@mui/material/styles";
 const schema = yup.object({
   name: yup.string().required("This field is required"),
   authorName: yup.string().required("This field is required"),
@@ -40,6 +43,8 @@ const schema = yup.object({
 });
 
 export default function CreateBook() {
+  const theme = useTheme();
+
   const {
     register,
     control,
@@ -48,6 +53,28 @@ export default function CreateBook() {
   } = useForm({
     resolver: yupResolver(schema),
   });
+
+  ///test
+
+  const ITEM_HEIGHT = 48;
+  const ITEM_PADDING_TOP = 8;
+  const MenuProps = {
+    PaperProps: {
+      style: {
+        maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+        width: 250,
+      },
+    },
+  };
+
+  function getStyles(name, test, theme) {
+    return {
+      fontWeight:
+        test.indexOf(name) === -1
+          ? theme.typography.fontWeightRegular
+          : theme.typography.fontWeightMedium,
+    };
+  }
 
   const navigate = useNavigate();
 
@@ -70,20 +97,20 @@ export default function CreateBook() {
   const handleSelectChange = (event) => {
     setTest(event.target.value);
   };
-  const testing =  test.forEach((item)=>{
-    return ({
-      id:0,
-      bookId:0,
-      categoryId:item
-    })
-   })
+  const testing = test.forEach((item) => {
+    return {
+      id: 0,
+      bookId: 0,
+      categoryId: item,
+    };
+  });
   //Post Form
   const onSubmit = async (data) => {
     data = {
       ...data,
-      testing
-    }
-    console.log(data,'response')
+      testing,
+    };
+    console.log(data, "response");
     // try {
     //   if (isSubmitting) return;
     //   const response = await createBookService(data);
@@ -147,19 +174,32 @@ export default function CreateBook() {
               </SInputField>
               <SInputField>
                 <FormControl fullWidth>
-                  <InputLabel id="category">Category</InputLabel>
+                  <InputLabel id="demo-multiple-chip-label">
+                    Category
+                  </InputLabel>
                   <Select
-                    labelId="category"
-                    id="category-select"
-                    label="Category"
+                    labelId="demo-multiple-chip-label"
+                    id="demo-multiple-chip"
                     multiple
                     value={test}
                     onChange={handleSelectChange}
-                   
+                    input={
+                      <OutlinedInput
+                        id="select-multiple-chip"
+                        label="Category"
+                      />
+                    }
+                    renderValue={(selected) => (
+                      <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+                        {selected.map((value) => (
+                          <Chip key={value} label={value} />
+                        ))}
+                      </Box>
+                    )}
                   >
-                    {categoryList.map((item, index) => (
-                      <MenuItem key={index} value={item.id}>
-                        {item.categoryName}
+                    {categoryList.map((category) => (
+                      <MenuItem key={category.id} value={category.categoryName}>
+                        {category.categoryName}
                       </MenuItem>
                     ))}
                   </Select>
@@ -187,8 +227,6 @@ export default function CreateBook() {
                 </FormControl>
               </SInputField>
 
-           
-
               <SInputField>
                 <Controller
                   control={control}
@@ -212,7 +250,7 @@ export default function CreateBook() {
                 />
 
                 <FormHelperText error>
-                  {errors?.birthDate?.message}{" "}
+                  {errors?.publicationDate?.message}
                 </FormHelperText>
               </SInputField>
             </FormGroup>
