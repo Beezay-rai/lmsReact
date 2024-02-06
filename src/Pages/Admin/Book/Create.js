@@ -94,21 +94,29 @@ export default function CreateBook() {
     categoryData();
   }, []);
 
+  const [bj,setBj] = useState([]);
+
   const handleSelectChange = (event) => {
-    setTest(event.target.value);
+
+    event.target.value.forEach(element => {
+      console.log(element)
+      
+      let abc = {
+        id:0,
+        categoryId:element
+      }
+      setBj(current=>[...current,abc])
+    });
+
   };
-  const testing = test.forEach((item) => {
-    return {
-      id: 0,
-      bookId: 0,
-      categoryId: item,
-    };
-  });
+
+
+ 
   //Post Form
   const onSubmit = async (data) => {
     data = {
       ...data,
-      testing,
+      bj,
     };
     console.log(data, "response");
     // try {
@@ -198,7 +206,7 @@ export default function CreateBook() {
                     )}
                   >
                     {categoryList.map((category) => (
-                      <MenuItem key={category.id} value={category.categoryName}>
+                      <MenuItem key={category.id} value={category.id}>
                         {category.categoryName}
                       </MenuItem>
                     ))}
