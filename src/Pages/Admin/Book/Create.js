@@ -20,7 +20,7 @@ import {
 import { SInputField } from "../../../Components/styles/Styles";
 import { IoIosArrowRoundBack } from "react-icons/io";
 import { Link, useNavigate } from "react-router-dom";
-import { useForm, Controller } from "react-hook-form";
+import { useForm, Controller, useFieldArray } from "react-hook-form";
 import { toast } from "react-toastify";
 import { useState, useEffect } from "react";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -52,6 +52,11 @@ export default function CreateBook() {
     formState: { errors, isSubmitting },
   } = useForm({
     resolver: yupResolver(schema),
+  });
+
+  const { fields, append, prepend, remove, swap, move, insert } = useFieldArray({
+    control, 
+    name: "categoryDetailList", // unique name for your Field Array
   });
 
   ///test
@@ -97,9 +102,7 @@ export default function CreateBook() {
   const [bj,setBj] = useState([]);
 
   const handleSelectChange = (event) => {
-
     event.target.value.forEach(element => {
-      console.log(element)
       
       let abc = {
         id:0,
@@ -107,7 +110,7 @@ export default function CreateBook() {
       }
       setBj(current=>[...current,abc])
     });
-
+    setTest(event.target.value)
   };
 
 
@@ -185,32 +188,34 @@ export default function CreateBook() {
                   <InputLabel id="demo-multiple-chip-label">
                     Category
                   </InputLabel>
-                  <Select
-                    labelId="demo-multiple-chip-label"
-                    id="demo-multiple-chip"
-                    multiple
-                    value={test}
-                    onChange={handleSelectChange}
-                    input={
-                      <OutlinedInput
-                        id="select-multiple-chip"
-                        label="Category"
-                      />
-                    }
-                    renderValue={(selected) => (
-                      <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
-                        {selected.map((value) => (
-                          <Chip key={value} label={value} />
-                        ))}
-                      </Box>
-                    )}
-                  >
-                    {categoryList.map((category) => (
-                      <MenuItem key={category.id} value={category.id}>
-                        {category.categoryName}
-                      </MenuItem>
-                    ))}
-                  </Select>
+                    <Select
+                      labelId="demo-multiple-chip-label"
+                      id="demo-multiple-chip"
+                      multiple
+                      value={test}
+                      onChange={handleSelectChange}
+                      input={
+                        <OutlinedInput
+                          id="select-multiple-chip"
+                          label="Category"
+                        />
+                      }
+                      renderValue={(selected) => (
+                        <Box
+                          sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}
+                        >
+                          {selected.map((value) => (
+                            <Chip key={value} label={value} />
+                          ))}
+                        </Box>
+                      )}
+                    >
+                      {categoryList.map((category) => (
+                        <MenuItem key={category.id} value={category.id}>
+                          {category.categoryName}
+                        </MenuItem>
+                      ))}
+                    </Select>
                 </FormControl>
               </SInputField>
               <SInputField>
