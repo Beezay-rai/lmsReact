@@ -35,7 +35,7 @@ import {
 import { categoryService } from "../../../Services/apiServices/category/categoryServices";
 import { useTheme } from "@mui/material/styles";
 const schema = yup.object({
-  name: yup.string().required("This field is required"),
+  bookName: yup.string().required("This field is required"),
   authorName: yup.string().required("This field is required"),
   isbn: yup.string().required("This field is required"),
   quantity: yup.number().required("This field is required"),
@@ -50,13 +50,9 @@ export default function CreateBook() {
     control,
     handleSubmit,
     formState: { errors, isSubmitting },
+    setValue,
   } = useForm({
     resolver: yupResolver(schema),
-  });
-
-  const { fields, append, prepend, remove, swap, move, insert } = useFieldArray({
-    control, 
-    name: "categoryDetailList", // unique name for your Field Array
   });
 
   ///test
@@ -99,45 +95,51 @@ export default function CreateBook() {
     categoryData();
   }, []);
 
-  const [bj,setBj] = useState([]);
+  const [bookCategoryDetailList, setbookCategoryDetailList] = useState([]);
 
   const handleSelectChange = (event) => {
-    event.target.value.forEach(element => {
-      
+    const myList = [];
+    const forTest= [];
+    event.target.value.forEach((element) => {
       let abc = {
-        id:0,
-        categoryId:element
+        id: 0,
+        bookId: 0,
+        categoryId: element,
+      };
+      let catname = categoryList.find(obj=>obj.id ==element)
+      if(catname!== undefined){
+
+        debugger
+        forTest.push(catname.categoryName)
       }
-      setBj(current=>[...current,abc])
+      myList.push(abc);
     });
-    setTest(event.target.value)
+    setbookCategoryDetailList(myList);
+    setTest(forTest);
   };
 
-
- 
   //Post Form
   const onSubmit = async (data) => {
     data = {
       ...data,
-      bj,
+      bookCategoryDetailList: bookCategoryDetailList,
     };
-    console.log(data, "response");
-    // try {
-    //   if (isSubmitting) return;
-    //   const response = await createBookService(data);
-    //   if (response.status === true) {
-    //     toast.success(response.message, {
-    //       autoclose: 1000,
-    //     });
-    //     navigate("/Book");
-    //   } else if (response.status === false) {
-    //     toast.error(response.message, {
-    //       autoclose: 1000,
-    //     });
-    //   }
-    // } catch (error) {
-    //   toast.error(error.message);
-    // }
+    try {
+      if (isSubmitting) return;
+      const response = await createBookService(data);
+      if (response.status === true) {
+        toast.success(response.message, {
+          autoclose: 1000,
+        });
+        navigate("/Admin/Book");
+      } else if (response.status === false) {
+        toast.error(response.message, {
+          autoclose: 1000,
+        });
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
   };
   return (
     <>
@@ -166,9 +168,9 @@ export default function CreateBook() {
                 <FormControl>
                   <TextField
                     label="Name"
-                    {...register("name")}
-                    error={errors?.name}
-                    helperText={errors?.name?.message}
+                    {...register("bookName")}
+                    error={errors?.bookName}
+                    helperText={errors?.bookName?.message}
                   />
                 </FormControl>
               </SInputField>
@@ -188,34 +190,33 @@ export default function CreateBook() {
                   <InputLabel id="demo-multiple-chip-label">
                     Category
                   </InputLabel>
-                    <Select
-                      labelId="demo-multiple-chip-label"
-                      id="demo-multiple-chip"
-                      multiple
-                      value={test}
-                      onChange={handleSelectChange}
-                      input={
-                        <OutlinedInput
-                          id="select-multiple-chip"
-                          label="Category"
-                        />
-                      }
-                      renderValue={(selected) => (
-                        <Box
-                          sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}
-                        >
-                          {selected.map((value) => (
-                            <Chip key={value} label={value} />
-                          ))}
-                        </Box>
-                      )}
-                    >
-                      {categoryList.map((category) => (
-                        <MenuItem key={category.id} value={category.id}>
-                          {category.categoryName}
-                        </MenuItem>
-                      ))}
-                    </Select>
+                  <Select
+                    labelId="demo-multiple-chip-label"
+                    id="demo-multiple-chip"
+                    multiple
+                    value={test}
+                    onChange={handleSelectChange}
+                    input={
+                      <OutlinedInput
+                        id="select-multiple-chip"
+                        label="Category"
+                      />
+                    }
+                    renderValue={(selected) => (
+                      <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+                        {selected.map((option) => (
+                          
+                          <Chip key={option} label={option} />
+                        ))}
+                      </Box>
+                    )}
+                  >
+                    {categoryList.map((category) => (
+                      <MenuItem key={category.id} value={category.id}>
+                        {category.categoryName}
+                      </MenuItem>
+                    ))}
+                  </Select>
                 </FormControl>
               </SInputField>
               <SInputField>
