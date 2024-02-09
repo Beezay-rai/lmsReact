@@ -99,23 +99,22 @@ export default function CreateBook() {
 
   const handleSelectChange = (event) => {
     const myList = [];
-    const forTest= [];
+    const noice=[];
     event.target.value.forEach((element) => {
       let abc = {
         id: 0,
         bookId: 0,
         categoryId: element,
-      };
-      let catname = categoryList.find(obj=>obj.id ==element)
-      if(catname!== undefined){
-
-        debugger
-        forTest.push(catname.categoryName)
-      }
+      };    
       myList.push(abc);
-    });
+
+      let cat = categoryList.find(obj=>obj.id===element)
+      noice.push(cat.categoryName)
+
+
+    });    
     setbookCategoryDetailList(myList);
-    setTest(forTest);
+    setTest(noice)
   };
 
   //Post Form
@@ -205,9 +204,13 @@ export default function CreateBook() {
                     renderValue={(selected) => (
                       <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
                         {selected.map((option) => (
-                          
+
                           <Chip key={option} label={option} />
-                        ))}
+                        )
+                            
+
+                        
+                        )}
                       </Box>
                     )}
                   >
