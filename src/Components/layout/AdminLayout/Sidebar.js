@@ -18,10 +18,10 @@ import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Button, Collapse, Modal } from "@mui/material";
 import { useDispatch } from "react-redux";
-import { logout } from "../../../redux/userDetail";
+import { logout,reset } from "../../../redux/userDetail";
 import zIndex from "@mui/material/styles/zIndex";
 
-function Sidebar({ sideBarOpen,drawerWidth ,navBarHeight}) {
+function Sidebar({ sideBarOpen, drawerWidth, navBarHeight }) {
   const modalStyle = {
     position: "absolute",
     top: "50%",
@@ -59,10 +59,10 @@ function Sidebar({ sideBarOpen,drawerWidth ,navBarHeight}) {
         variant="persistent"
         sx={{
           width: drawerWidth,
-        
+
           "& .MuiDrawer-paper": {
             width: drawerWidth,
-            marginTop:navBarHeight,
+            marginTop: navBarHeight,
           },
         }}
         open={sideBarOpen}
@@ -181,7 +181,12 @@ function Sidebar({ sideBarOpen,drawerWidth ,navBarHeight}) {
             <br /> you want to log out?
           </Typography>
           <Toolbar sx={{ justifyContent: "space-evenly" }}>
-            <Button variant="contained" onClick={() => dispatch(logout())}>
+            <Button variant="contained" onClick={() => {
+
+              dispatch(logout())
+              dispatch(reset())
+            }
+              }>
               Log Out
             </Button>
             <Button variant="outlined" color="error" onClick={handleModalOpen}>
