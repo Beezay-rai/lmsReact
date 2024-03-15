@@ -1,4 +1,4 @@
-import { createAction, createSlice } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   user: "",
@@ -19,15 +19,12 @@ export const userSlicev2 = createSlice({
     setIsLoading:(state,action)=>{
       state.features.isLoading = action.payload
     },
-    reset:(state,action)=>{
-      state =initialStatev2
-    },
+  
   }
 });
 
 
 export const {setIsLoading} = userSlicev2.actions;
-export const {reset} = userSlicev2.actions;
 
 
 
@@ -41,9 +38,6 @@ export const userSlice = createSlice({
     logout : (state) => {
       state.user=null;
       localStorage.removeItem("user")
-    },
-    approvalStatus : (state,action) => {
-      state.approvalStatus = action.payload
     }
   },
 });
@@ -55,7 +49,6 @@ export const { logout } = userSlice.actions;
 
 export const { setUserDetail } = userSlice.actions;
 
-export const { approvalStatus } = userSlice.actions;
 
 export default userSlice.reducer;
 

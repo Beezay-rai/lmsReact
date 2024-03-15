@@ -18,7 +18,7 @@ import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Button, Collapse, Modal } from "@mui/material";
 import { useDispatch } from "react-redux";
-import { logout,reset } from "../../../redux/userDetail";
+import { logout } from "../../../redux/userDetail";
 import zIndex from "@mui/material/styles/zIndex";
 
 function Sidebar({ sideBarOpen, drawerWidth, navBarHeight }) {
@@ -184,7 +184,6 @@ function Sidebar({ sideBarOpen, drawerWidth, navBarHeight }) {
             <Button variant="contained" onClick={() => {
 
               dispatch(logout())
-              dispatch(reset())
             }
               }>
               Log Out

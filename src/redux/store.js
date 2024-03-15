@@ -4,10 +4,7 @@ import userReducer, { userSlicev2 } from "./userDetail";
 import storage from "redux-persist/lib/storage";
 
 import {
-    persistReducer, FLUSH,
-    REHYDRATE,
-    PERSIST,
-    PURGE,
+    persistReducer
 } from "redux-persist"
 import persistStore from "redux-persist/es/persistStore";
 
@@ -27,12 +24,7 @@ const persistedReducer = persistReducer(persitConfig, reducer)
 
 export const store = configureStore({
     reducer: persistedReducer,
-    middleware: (getDefaultMiddleware) =>
-        getDefaultMiddleware({
-            serializableCheck: {
-                ignoredActions: [FLUSH, REHYDRATE, PERSIST, PURGE],
-            },
-        }),
+   
 });
 
 const persistor = persistStore(store);

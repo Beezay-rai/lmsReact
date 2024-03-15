@@ -81,7 +81,6 @@ export default function CreateBook() {
 
   // Category List
   const [categoryList, setCategoryList] = useState([]);
-  const [test, setTest] = useState([]);
   useEffect(() => {
     let categoryData = () => {
       categoryService().then((response) => {
@@ -98,23 +97,25 @@ export default function CreateBook() {
   const [bookCategoryDetailList, setbookCategoryDetailList] = useState([]);
 
   const handleSelectChange = (event) => {
-    const myList = [];
-    const noice=[];
-    event.target.value.forEach((element) => {
-      let abc = {
-        id: 0,
-        bookId: 0,
-        categoryId: element,
-      };    
-      myList.push(abc);
+    debugger
+    setbookCategoryDetailList(event.target.value)
+    // const myList = [];
+    // const noice=[];
+    // event.target.value.forEach((element) => {
+    //   let abc = {
+    //     id: 0,
+    //     bookId: 0,
+    //     categoryId: element,
+    //   };    
+    //   myList.push(element);
 
-      let cat = categoryList.find(obj=>obj.id===element)
-      noice.push(cat.categoryName)
+    //   let cat = categoryList.find(obj=>obj.id===element)
+    //   noice.push(cat.categoryName)
 
 
-    });    
-    setbookCategoryDetailList(myList);
-    setTest(noice)
+    // });    
+    // setbookCategoryDetailList(myList);
+    // setTest(noice)
   };
 
   //Post Form
@@ -193,7 +194,7 @@ export default function CreateBook() {
                     labelId="demo-multiple-chip-label"
                     id="demo-multiple-chip"
                     multiple
-                    value={test}
+                    value={bookCategoryDetailList}
                     onChange={handleSelectChange}
                     input={
                       <OutlinedInput

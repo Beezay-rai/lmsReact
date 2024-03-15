@@ -185,7 +185,7 @@ export default function Transaction() {
                                         {(item?.id)}
                                     </TableCell>
                                     <TableCell>
-                                        {item?.studentFullName}
+                                        {item?.issuedDate}
                                     </TableCell>
                                     <TableCell>
                                         <Checkbox
