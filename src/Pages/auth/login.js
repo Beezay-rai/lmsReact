@@ -28,7 +28,7 @@ import { FaFacebook, FaTwitter } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import { store } from "../../redux/store";
 import { GoogleLogin } from "@react-oauth/google";
-
+import { googleLogin } from "../../Services/apiServices/auth/googleService";
 
 export default function Login() {
   const {
@@ -36,8 +36,6 @@ export default function Login() {
     handleSubmit,
     formState: { isSubmitting },
   } = useForm();
-
-
 
   const [checked, setChecked] = useState(false);
   const dispatch = useDispatch();
@@ -47,10 +45,30 @@ export default function Login() {
   };
   const currentState = useSelector((state) => state.userDetailv2);
 
-
-  const googleResponse = (response) => {
-    alert("Logged");
-    console.log(response);
+  const googleResponse = async (response) => {
+    debugger;
+    googleLogin(response.credential)
+      .then((apiResponse) => {
+        if (apiResponse.status === true) {
+          dispatch(setIsLoading(false));
+          dispatch(setUserDetail(apiResponse));
+          toast.success(`${apiResponse .data.name} Logged in Successfully`, {
+            icon: "🚀",
+            autoClose: 2000,
+            position: "top-right",
+          });
+          navigate("/");
+        } else {
+          toast.error(apiResponse.message, {
+            autoClose: 1000,
+          });
+        }
+      })
+      .catch(() => {
+        toast.error("Login Failure", {
+          autoClose: 3000,
+        });
+      });
   };
 
   const onSubmit = async (data) => {
@@ -173,7 +191,12 @@ export default function Login() {
                       className="m-2"
                     ></FaFacebook>
 
-                    <GoogleLogin   shape="circle" type="icon" size="large" onSuccess={googleResponse}></GoogleLogin>
+                    <GoogleLogin
+                      shape="circle"
+                      type="icon"
+                      size="large"
+                      onSuccess={googleResponse}
+                    ></GoogleLogin>
                     <FaTwitter
                       size={30}
                       color="#1DA1F2"

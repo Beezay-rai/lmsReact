@@ -8,7 +8,16 @@ const apiUrls = {
         signUp:{
             method:"POST",
             url:"/SignUp"
+        },
+        googleSignUp:{
+            method:"POST",
+            url:"/GoogleSignup"
+        },
+        googleLogin:{
+            method:"POST",
+            url:"/GoogleLogin"
         }
+
     },
 
 

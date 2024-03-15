@@ -7,7 +7,7 @@ const initialState = {
 
 export const initialStatev2={
     features:{
-      isLoading:true,
+      isLoading:false,
     }
 }
 
