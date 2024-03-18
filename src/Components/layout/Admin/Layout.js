@@ -1,34 +1,19 @@
-import * as React from "react";
-import Box from "@mui/material/Box";
-import Sidebar from "./Sidebar";
-import {
-  AppBar,
-  Avatar,
-  Badge,
-  Button,
-  Collapse,
-  Divider,
-  Fade,
-  IconButton,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
-  Menu,
-  MenuItem,
-  Toolbar,
-  Typography,
-} from "@mui/material";
-import { useState } from "react";
-import ava from "../../../assests/img/ava.jpg";
-import { MdExpandLess, MdExpandMore } from "react-icons/md";
-import { Link } from "react-router-dom";
-import { PiChatDotsDuotone } from "react-icons/pi";
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import MenuIcon from "@mui/icons-material/Menu";
 import NotificationsIcon from "@mui/icons-material/Notifications";
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-export default function Layout({ children }) {
+import {
+  Avatar,
+  Badge,
+  IconButton,
+  Typography
+} from "@mui/material";
+import Box from "@mui/material/Box";
+import * as React from "react";
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import ava from "../../../assests/img/ava.jpg";
+import Sidebar from "./Sidebar";
+export default function AdminLayout({ children }) {
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const [drawerOpen,setDrawerOpen] = useState(false);
 

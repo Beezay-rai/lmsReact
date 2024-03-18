@@ -2,33 +2,27 @@ import {
   Box,
   Button,
   Checkbox,
-  Container,
   Divider,
   FormControl,
   FormControlLabel,
   FormGroup,
-  Icon,
   TextField,
-  Typography,
+  Typography
 } from "@mui/material";
+import { GoogleLogin } from "@react-oauth/google";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import { loginUser } from "../../Services/apiServices/auth/loginService";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  setUserDetail,
-  userSlicev2,
-  setIsLoading,
-  initialStatev2,
-} from "../../redux/userDetail";
-import { toast } from "react-toastify";
-import { Link, Navigate, useNavigate } from "react-router-dom";
-import img from "../../assests/img/asdf.png";
 import { FaFacebook, FaTwitter } from "react-icons/fa";
-import { FcGoogle } from "react-icons/fc";
-import { store } from "../../redux/store";
-import { GoogleLogin } from "@react-oauth/google";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import { googleLogin } from "../../Services/apiServices/auth/googleService";
+import { loginUser } from "../../Services/apiServices/auth/loginService";
+import img from "../../assests/img/asdf.png";
+import {
+  setIsLoading,
+  setUserDetail
+} from "../../redux/appSlices";
 
 export default function Login() {
   const {
@@ -43,10 +37,10 @@ export default function Login() {
   const handleCheckBox = () => {
     setChecked(!checked);
   };
-  const currentState = useSelector((state) => state.userDetailv2);
+  const appState = useSelector((state) => state.appFeature);
 
   const googleResponse = async (response) => {
-    debugger;
+ 
     googleLogin(response.credential)
       .then((apiResponse) => {
         if (apiResponse.status === true) {
@@ -102,6 +96,7 @@ export default function Login() {
     <Box className="flex justify-center mt-10 m-auto   bg-white border  w-4/5   shadow-2xl rounded-2xl">
       <div className="w-full ">
         <img
+          alt="picture"
           src={img}
           style={{
             maxHeight: "100%",
@@ -174,7 +169,7 @@ export default function Login() {
                     variant="contained"
                     sx={{ textTransform: `none` }}
                   >
-                    {isSubmitting || currentState.features.isLoading
+                    {isSubmitting || appState.isLoading
                       ? "Signing in.."
                       : "Sign In"}
                   </Button>

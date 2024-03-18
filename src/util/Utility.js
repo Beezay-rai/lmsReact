@@ -1,17 +1,16 @@
 import { useSelector } from "react-redux";
-import { Outlet,Navigate } from "react-router-dom";
-import UserLayout from "../Components/layout/UserLayout/userLayout";
-import Layout from "../Components/layout/AdminLayout/Layout";
-export const PrivateRoute =({component:Component}) =>{
+import { Navigate, Outlet } from "react-router-dom";
+import AdminLayout from "../Components/layout/Admin/Layout";
+import UserLayout from "../Components/layout/User/userLayout";
+export const PrivateRoute =() =>{
     const userData = useSelector((state)=>state.userDetail);
-
 
     return (
         userData.user?.status === true ? (
             userData.user?.data.role !== "User" ? (
-                <Layout>
+                <AdminLayout>
                     <Outlet />
-                </Layout>
+                </AdminLayout>
             ) : (<UserLayout />)
 
         ) : (

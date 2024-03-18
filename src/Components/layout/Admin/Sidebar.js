@@ -1,25 +1,24 @@
+import { Button, Collapse, Modal } from "@mui/material";
+import Box from "@mui/material/Box";
 import Divider from "@mui/material/Divider";
+import Drawer from "@mui/material/Drawer";
+import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import Drawer from "@mui/material/Drawer";
-import List from "@mui/material/List";
-import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
+import { useState } from "react";
 import { AiOutlineSetting, AiOutlineUserAdd } from "react-icons/ai";
 import { FaHome, FaWrench } from "react-icons/fa";
-import { PiStudentFill } from "react-icons/pi";
+import { FiLogOut } from "react-icons/fi";
 import { GiBookCover } from "react-icons/gi";
 import { MdBook, MdExpandLess, MdExpandMore } from "react-icons/md";
-import { FiLogOut } from "react-icons/fi";
-import { Link } from "react-router-dom";
-import { useEffect, useState } from "react";
-import { Button, Collapse, Modal } from "@mui/material";
+import { PiStudentFill } from "react-icons/pi";
 import { useDispatch } from "react-redux";
-import { logout } from "../../../redux/userDetail";
-import zIndex from "@mui/material/styles/zIndex";
+import { Link } from "react-router-dom";
+import { logout } from "../../../redux/appSlices";
 
 function Sidebar({ sideBarOpen, drawerWidth, navBarHeight }) {
   const modalStyle = {
