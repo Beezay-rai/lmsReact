@@ -23,6 +23,22 @@ import Transaction from "./Pages/Admin/Transaction/TransactionIndex";
 import EditTransaction from "./Pages/Admin/Transaction/Edit";
 import Home from "./Pages/Admin/Home/Home";
 import Error from "./Pages/shared/error";
+import UserHome from "./Pages/User/Home";
+import AppRoutes from "./util/Routes";
+
+
+const testRoutes =[
+    {
+        path:"/",
+        element:<Home />
+    }
+]
+
+
+
+
+
+
 
 export default function Gateway() {
     return (
@@ -33,36 +49,9 @@ export default function Gateway() {
             <Route exact path="/*" element={<Error/>} />
 
             <Route element={<PrivateRoute />}>
-                <Route path="/" element={<Home />} />
-                {/* SetUser */}
-                <Route exact path="/Admin/UserList" element={<UserList />} />
-                <Route exact path="/Admin/UserList/Create" element={<CreateUser />} />
-
-                {/*  */}
-                <Route exact path="/Admin/Course" element={<CourseIndex />} />
-                <Route exact path="/Admin/Course/Create" element={<CreateCourse />} />
-                <Route exact path="/Admin/Course/Edit/:id" element={<EditCourse />} />
-
-                {/* Student */}
-                <Route exact path="/Admin/Student" element={<StudentIndex />} />
-                <Route exact path="/Admin/Student/Create" element={<CreateStudent />} />
-                <Route exact path="/Admin/Student/Edit/:id" element={<EditStudent />} />
-
-                {/* Category */}
-                <Route exact path="/Admin/Category" element={<CategoryIndex />} />
-                <Route exact path="/Admin/Category/Create" element={<CreateCategory />} />
-                <Route exact path="/Admin/Category/Edit/:id" element={<EditCategory />} />
-
-                {/* Book */}
-                <Route exact path="/Admin/Book" element={<Book />} />
-                <Route exact path="/Admin/Book/Create" element={<CreateBook/>} />
-                <Route exact path="/Admin/Book/Edit/:id" element={<EditBook />} />
-
-                {/* Transaction */}
-                <Route exact path="/Admin/Transaction" element={<Transaction />} />
-                <Route exact path="/Admin/Transaction/Create" element={<CreateTransaction />} />
-                <Route exact path="/Admin/Transaction/Edit/:id" element={<EditTransaction />} />
-
+                {testRoutes.map(route=>{
+                    return <Route exact path={route.path} element={route.element}/>
+                })}
             </Route>
         </Routes>
     )

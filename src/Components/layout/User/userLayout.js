@@ -6,6 +6,7 @@ export default function UserLayout({ children }) {
     return (
        <div>
         user
+        {children}
        </div>
     )
 }

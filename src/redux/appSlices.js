@@ -12,14 +12,11 @@ export const userSlice = createSlice({
       state.user = action.payload;
     },
     logout: (state) => {
-      state.user = null;
+      state.user = "";
     },
   },
 });
 //#endregion
-export const { logout } = userSlice.actions;
-
-export const { setUserDetail } = userSlice.actions;
 
 //#region AppStates
 const appState = {
@@ -35,9 +32,13 @@ export const appSlice = createSlice({
   },
 });
 
-export const { setIsLoading } = appSlice.actions;
 //#endregion 
 
 
+export const { setIsLoading } = appSlice.actions;
+
+export const { logout } = userSlice.actions;
+
+export const { setUserDetail } = userSlice.actions;
 
 export default userSlice.reducer;
