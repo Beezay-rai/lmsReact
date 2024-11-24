@@ -20,17 +20,17 @@ export const createCategoryService = async (data)=>{
 }
 
 
-export const editCategoryService = async(data)=>{
+export const editCategoryService = async(id,data)=>{
     let response = await categoryApi(
         apiUrls.category.editCategory.method,
-        apiUrls.category.editCategory.url ,
+        apiUrls.category.editCategory.url +id,
         data
     );
     return response;
 }
 
 export const deleteCategoryService = async(id)=>{
-    debugger
+    
     let response = await categoryApi(
         apiUrls.category.deleteCategory.method,
         apiUrls.category.deleteCategory.url +"?id="+id,
@@ -42,7 +42,7 @@ export const deleteCategoryService = async(id)=>{
 export const categoryByIdService = async (id)=>{
     let response = await categoryApi(
         apiUrls.category.categoryById.method,
-        apiUrls.category.categoryById.url+"?id="+id ,
+        apiUrls.category.categoryById.url+id ,
         
     )
     return response

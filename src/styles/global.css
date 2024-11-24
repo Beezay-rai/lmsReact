@@ -1,3 +1,23 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.modal {
+    display: flex; 
+    flex-direction: column;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: auto;
+    height: auto;
+    background-color: #ffffff;
+    border: 1px solid silver;
+    outline: none;
+    border-radius: 10px;
+    padding: 30px;
+}
+
+.table-container{
+    @apply bg-white rounded
+}

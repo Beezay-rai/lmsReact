@@ -97,7 +97,7 @@ export default function CreateBook() {
   const [bookCategoryDetailList, setbookCategoryDetailList] = useState([]);
 
   const handleSelectChange = (event) => {
-    debugger
+
     setbookCategoryDetailList(event.target.value)
     // const myList = [];
     // const noice=[];

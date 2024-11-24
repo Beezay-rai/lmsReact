@@ -31,7 +31,7 @@ export const editStudentService = async(data)=>{
 }
 
 export const deleteStudentService = async(id)=>{
-    debugger
+    
     let response = await studentApi(
         apiUrls.student.deleteStudent.method,
         apiUrls.student.deleteStudent.url +"?id="+id,

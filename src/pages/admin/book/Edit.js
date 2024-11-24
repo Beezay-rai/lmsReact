@@ -90,7 +90,7 @@ export default function EditBook() {
 
   const onSubmit = async (data) => {
     try {
-      debugger;
+
       if (isSubmitting) return;
       const response = await editBookService(data);
       if (response.status === true) {

@@ -30,7 +30,7 @@ export const editBookService = async(data)=>{
 }
 
 export const deleteBookService = async(id)=>{
-    debugger
+    
     let response = await bookApi(
         apiUrls.book.deleteBook.method,
         apiUrls.book.deleteBook.url +"?id="+id,

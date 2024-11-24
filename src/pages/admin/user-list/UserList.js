@@ -11,7 +11,6 @@ import { Box, Button, Grid, Modal, Switch, Toolbar, Typography } from '@mui/mate
 
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { UserListSerivce } from '../../../Services/apiServices/common/commonServices';
 
 
 
@@ -61,18 +60,7 @@ export default function UserList() {
     //Fetch Users 
     useEffect(() => {
         const fetchedData = () => {
-            UserListSerivce().then(({ status, data }) => {
-                try {
-                    if (status) {
-                        setApiData(data);
-                    }
-                    else {
-                        setApiData([]);
-                    }
-                }
-                catch (error) {
-                }
-            })
+          
         }
         fetchedData()
     }, [])

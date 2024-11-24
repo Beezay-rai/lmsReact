@@ -9,7 +9,7 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AiOutlineSetting, AiOutlineUserAdd } from "react-icons/ai";
 import { FaHome, FaWrench } from "react-icons/fa";
 import { FiLogOut } from "react-icons/fi";
@@ -19,8 +19,10 @@ import { PiStudentFill } from "react-icons/pi";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { logout } from "../../../redux/appSlices";
+import { useMediaQuery, useTheme } from '@mui/material';
 
-function Sidebar({ sideBarOpen, drawerWidth, navBarHeight }) {
+function Sidebar({ sideBarOpen, navBarHeight }) {
+  
   const modalStyle = {
     position: "absolute",
     top: "50%",
@@ -47,20 +49,38 @@ function Sidebar({ sideBarOpen, drawerWidth, navBarHeight }) {
   const handleModalOpen = () => {
     setModalOpen(!modalOpen);
   };
+
+
   // for Main Setup Dropdown
-  const [mainListOpen, setMainListOPen] = useState(false);
+  const [mainListOpen, setMainListOpen] = useState(false);
   const handleMainListOpen = () => {
-    setMainListOPen(!mainListOpen);
+    setMainListOpen(!mainListOpen);
   };
+  
+  const [variant,setVariant]=useState("permanent");
+
+  const width = window.innerWidth;
+  useEffect(()=>{
+
+    if (width < 768) {
+      setVariant("persistent")
+    } else if (width >= 768 && width < 1024) {
+      setVariant("permanent")
+    } else {
+      setVariant("permanent")
+    }
+  },[width])
+
+
   return (
     <>
       <Drawer
-        variant="persistent"
+        // variant={variant}
+        variant={variant}
         sx={{
-          width: drawerWidth,
-
+          width: "250px",
           "& .MuiDrawer-paper": {
-            width: drawerWidth,
+            width: "250px",
             marginTop: navBarHeight,
           },
         }}
@@ -75,6 +95,7 @@ function Sidebar({ sideBarOpen, drawerWidth, navBarHeight }) {
               <ListItemText primary="Home" />
             </ListItemButton>
           </Link>
+
           {/* Main Set Up */}
           <ListItemButton onClick={handleMainListOpen}>
             <ListItemIcon>
@@ -180,11 +201,12 @@ function Sidebar({ sideBarOpen, drawerWidth, navBarHeight }) {
             <br /> you want to log out?
           </Typography>
           <Toolbar sx={{ justifyContent: "space-evenly" }}>
-            <Button variant="contained" onClick={() => {
-
-              dispatch(logout())
-            }
-              }>
+            <Button
+              variant="contained"
+              onClick={() => {
+                dispatch(logout());
+              }}
+            >
               Log Out
             </Button>
             <Button variant="outlined" color="error" onClick={handleModalOpen}>

@@ -22,7 +22,6 @@ import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { useEffect, useState } from "react";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { roleService } from "../../../Services/apiServices/common/role/roleService";
 import {
   SignUpService,
   signUp,
@@ -58,14 +57,12 @@ export default function CreateUser() {
   //For Role Selectlist
   const [roleList, SetRoleList] = useState([]);
   useEffect(() => {
-    roleService().then((response) => {
-      SetRoleList(response.data);
-    });
+ 
   }, []);
 
   const onSubmit = async (data) => {
     try {
-        debugger
+        
       if (isSubmitting) return;
       const response = await signUp(data);
       if (response.status === true) {

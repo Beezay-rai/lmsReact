@@ -101,7 +101,7 @@ export default function Transaction() {
 
     //Fetch TransactionList 
     useEffect(() => {
-        debugger
+        
         const fetchedData = () => {
             transactionService().then(({ status, data }) => {
                 try {

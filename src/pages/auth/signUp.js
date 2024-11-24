@@ -35,7 +35,7 @@ export default function SignUp() {
     const onSubmit = async (data)=>{
         if(isSubmitting) return;
         signUp(data).then((response)=>{
-            debugger
+            
             if(response.status){
                 toast.success(("Signed Up Sucessfully !!"),{
                     autoClose:3000

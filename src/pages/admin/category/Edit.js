@@ -1,109 +1,121 @@
-import * as React from 'react';
-import CssBaseline from '@mui/material/CssBaseline';
-import Box from '@mui/material/Box';
-import Container from '@mui/material/Container';
-import { Button, FormControl, FormGroup, Stack, TextField } from '@mui/material';
-import { SInputField } from '../../../components/styles/Styles';
-import { IoIosArrowRoundBack } from 'react-icons/io'
-import { Link, useNavigate, useParams } from 'react-router-dom';
-import { useForm } from 'react-hook-form';
-import { editCategoryService, categoryByIdService } from '../../../Services/apiServices/category/categoryServices';
-import { toast } from 'react-toastify';
-import { useState, useEffect } from 'react';
+import React, { useEffect, useState } from "react";
+import {
+  Box,
+  Button,
+  FormControl,
+  FormGroup,
+  FormLabel,
+  Stack,
+  TextField,
+  Typography,
+} from "@mui/material";
+import { SInputField, TextArea } from "../../../components/styles/Styles";
+import { IoIosArrowRoundBack } from "react-icons/io";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import {
+  editCategoryService,
+  categoryByIdService,
+} from "../../../Services/apiServices/category/categoryServices";
+import { toast } from "react-toastify";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+
+const schema = yup.object().shape({
+  name: yup.string().required("This field is required!"),
+});
 
 export default function EditCategory() {
-    const { register, handleSubmit, formState: { errors, isSubmitting }, setValue } = useForm();
-    const navigate = useNavigate();
-    const [apiData, setApiData] = useState([])
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors, isSubmitting },
+  } = useForm({
+    resolver: yupResolver(schema),
+  });
 
-    //Fetch by Id
-    const { id } = useParams();
-    useEffect(() => {
-        let fetchData = async () => {
-            await categoryByIdService(id)
-                .then((response) => {
-                    setApiData(response.data);
-                })
+  const navigate = useNavigate();
+  const { id } = useParams();
+
+  useEffect(() => {
+    const fetchCategory = async () => {
+      try {
+        const response = await categoryByIdService(id);
+        if (response?.data) {
+          const { name, semester, credits, description } = response.data;
+          setValue("name", name);
         }
-        fetchData()
-    }, [])
+      } catch (error) {
+        toast.error("Failed to load category data.");
+      }
+    };
 
+    fetchCategory();
+  }, [id, setValue]);
 
-    // to set the incoming value to the respective fields
-    const [initialValue, setInitialValue] = useState({
-        id: 0,
-        name: "",
-    });
+  const onSubmit = async (data) => {
+    debugger
+    if (isSubmitting) return;
 
-    useEffect(() => {
-        setInitialValue({
-            id: apiData?.id,
-            name: apiData?.name || "",
-        });
-    }, [apiData]);
-    useEffect(() => {
-        // Use setValue to set values for each input field
-        setValue("id", initialValue.id)
-        setValue("name", initialValue.name);
-    }, [initialValue]);
-
-
-    const onSubmit = async (data) => {
-        try {
-            debugger;
-            if (isSubmitting) return;
-            const response = await editCategoryService(data);
-            if (response.status === true) {
-                toast.success(response.message, {
-                    autoclose: 1000,
-                })
-                navigate("/Category")
-            } else if (response.status === false) {
-                toast.error(response.message, {
-                    autoclose: 1000,
-                })
-            }
-
-        }
-        catch (error) {
-            toast.error(error.message)
-        }
-
+    try {
+      const response = await editCategoryService(id, data);
+      if (response.status) {
+        toast.success(response.message, { autoClose: 1000 });
+        navigate("/Admin/Category");
+      } else {
+        toast.error(response.message, { autoClose: 1000 });
+      }
+    } catch (error) {
+      toast.error("Failed to update category.");
     }
-    return (
-        <>
-            <CssBaseline />
-            <Container maxWidth="xl">
-                <h2>Edit</h2>
-                <Box sx={{ bgcolor: 'white', padding: '10px', marginTop: '15px', borderRadius: '20px' }}>
-                    <Box component="form" sx={{ padding: `10px` }} onSubmit={handleSubmit(onSubmit)} >
-                        <FormGroup sx={{ display: `flex`, flexDirection: `row` }}>
-                            <SInputField>
-                                <FormControl>
-                                    <TextField
-                                        required
-                                        label="Name"
-                                        {...register('name', { required: true })}
-                                        value={initialValue.name}
-                                        onChange={(e) => setInitialValue({ ...initialValue, name: e.target.value })}
-                                    />
-                                </FormControl>
-                            </SInputField>
-                        </FormGroup>
+  };
 
-                        <Stack direction="row" spacing={2} sx={{ margin: `20px 20px 20px 5px` }}>
-                            <Link to={"/Category"}>
-                                <Button variant="outlined" color='error' endIcon={<IoIosArrowRoundBack />}>
-                                    Back
-                                </Button>
-                            </Link>
-                            <Button type="submit" variant="contained" color="success" size='small'>
-                                Submit
-                            </Button>
-                        </Stack>
-                    </Box>
-                </Box>
-            </Container>
-        </>
-    );
+  return (
+    <div>
+      <div className="bg-white p-5 rounded">
+        <Typography variant="h5">Update Category</Typography>
+      </div>
+
+      <div className="bg-white p-5 mt-2 rounded">
+        <Box
+          component="form"
+          sx={{ padding: "10px" }}
+          onSubmit={handleSubmit(onSubmit)}
+        >
+          <FormGroup sx={{ flexDirection: "row" }}>
+            <SInputField>
+              <FormControl>
+                <TextField
+                  label="Name"
+                  {...register("name")}
+                  error={!!errors.name}
+                  helperText={errors.name?.message}
+                />
+              </FormControl>
+            </SInputField>
+          </FormGroup>
+          <Stack direction="row" spacing={2} sx={{ margin: "20px 5px" }}>
+            <Link to="/Admin/Category">
+              <Button
+                variant="outlined"
+                color="error"
+                endIcon={<IoIosArrowRoundBack />}
+              >
+                Back
+              </Button>
+            </Link>
+            <Button
+              type="submit"
+              variant="contained"
+              color="success"
+              size="small"
+            >
+              Submit A
+            </Button>
+          </Stack>
+        </Box>
+      </div>
+    </div>
+  );
 }

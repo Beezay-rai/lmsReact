@@ -1,201 +1,160 @@
-import { useState, React, useEffect } from 'react';
-import Paper from '@mui/material/Paper';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TablePagination from '@mui/material/TablePagination';
-import TableRow from '@mui/material/TableRow';
-import { Box, Button, Checkbox, Grid, Modal, Toolbar, Typography } from '@mui/material';
-import { FaTrash } from 'react-icons/fa'
-import { BsPencilSquare } from 'react-icons/bs'
-import { Link } from 'react-router-dom';
-import { deleteCourseService, courseService } from '../../../Services/apiServices/course/courseServices';
-import { toast } from 'react-toastify';
+import React, { useState, useEffect } from "react";
+import {
+  Button,
+  Grid,
+  Modal,
+  Typography,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TablePagination,
+  TableRow,
+} from "@mui/material";
+import { FaTrash } from "react-icons/fa";
+import { BsPencilSquare } from "react-icons/bs";
+import { Link } from "react-router-dom";
+import {
+  deleteCourseService,
+  courseService,
+} from "../../../Services/apiServices/course/courseServices";
+import { toast } from "react-toastify";
+
 export default function CourseIndex() {
-    const [page, setPage] = useState(0);
-    const [rowsPerPage, setRowsPerPage] = useState(10);
-    const [apiData, setApiData] = useState([]);
-    const [open, setOpen] = useState(false);
-    const [id, setId] = useState(0);
-    const [change, setChange] = useState(false);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [apiData, setApiData] = useState([]);
+  const [open, setOpen] = useState(false);
+  const [id, setId] = useState(0);
+  const [change, setChange] = useState(false);
 
-    const handleClick = (id) => {
-        debugger
-        setId(id);
-        handleOpen();
+  const handleEditClick = (id) => {
+    setId(id);
+    toggleModal();
+  };
+
+  const handleDeleteSubmit = async () => {
+    try {
+      const response = await deleteCourseService(id);
+      if (response.status) {
+        toast.success("Deleted Successfully", { autoClose: 2000 });
+        setChange(!change);
+      } else {
+        toast.error("Error while Deleting", { autoClose: 2000 });
+      }
+    } catch {
+      toast.error("Error while Deleting", { autoClose: 2000 });
+    } finally {
+      toggleModal();
     }
+  };
 
-    const handleSubmit = () => {
-        debugger
-        deleteCourseService(id)
-            .then((response) => {
-                if (response.status) {
-                    toast.error("Deleted Sucessfully", {
-                        autoClose: 2000
-                    })
-                    handleOpen()
-                    setChange(!change)
+  const toggleModal = () => setOpen((prev) => !prev);
 
-                }
-                else {
-                    toast.error("Error while Deleting", {
-                        autoClose: 2000
-                    })
-                }
-            })
+  const handleChangePage = (_, newPage) => setPage(newPage);
 
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(+event.target.value);
+    setPage(0);
+  };
 
-    }
-
-    const handleOpen = () => {
-        setOpen(!open);
-    }
-
-    const handleChangePage = (event, newPage) => {
-        setPage(newPage);
+  useEffect(() => {
+    const fetchCourses = async () => {
+      try {
+        const { status, data } = await courseService();
+        setApiData(status ? data : []);
+      } catch {
+        setApiData([]);
+      }
     };
+    fetchCourses();
+  }, [change]);
 
-    const ModalBoxStyle = {
-        display: 'flex',
-        flexDirection: 'column',
-        position: 'absolute',
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)',
-        width: "auto",
-        height: "auto",
-        bgcolor: 'background.paper',
-        border: '1px solid silver',
-        outline: "none",
-        borderRadius: '10px',
-        padding: "30px"
-    };
+  return (
+    <>
+      <div className="flex flex-row justify-between py-5 px-3 rounded bg-white mb-2">
+        <Typography variant="h5">Course</Typography>
+        <Link to="/Admin/Course/Create">
+          <Button variant="contained" color="success">
+            + Add
+          </Button>
+        </Link>
+      </div>
 
+      <Modal open={open} onClose={toggleModal}>
+        <div className="modal">
+          <Typography variant="h5" component="h6" sx={{ marginBottom: "15px" }}>
+            Are you sure?
+          </Typography>
+          <Grid container direction="row-reverse">
+            <Grid item>
+              <Button variant="outlined" color="error" onClick={toggleModal}>
+                Cancel
+              </Button>
+            </Grid>
+            <Grid item sx={{ mr: "5px" }}>
+              <Button
+                variant="contained"
+                color="error"
+                onClick={handleDeleteSubmit}
+              >
+                Delete
+              </Button>
+            </Grid>
+          </Grid>
+        </div>
+      </Modal>
 
-    const handleChangeRowsPerPage = (event) => {
-        setRowsPerPage(+event.target.value);
-        setPage(0);
-    };
-
-    //Fetch Course 
-    useEffect(() => {
-        const fetchedData = () => {
-            courseService().then(({ status, data }) => {
-                try {
-                    if (status) {
-                        setApiData(data);
-                    }
-                    else {
-                        setApiData([]);
-                    }
-                }
-                catch (error) {
-                }
-            })
-        }
-        fetchedData()
-    }, [change])
-
-    return (<>
-        <Toolbar sx={{ flexDirection: `row`, borderRadius: '20px', justifyContent: "space-between", padding: '10px', alignItems: 'flex-start', background: 'white', marginBottom: '10px' }}>
-            <Typography variant='h5' >Course</Typography>
-            <Link to={"/Admin/Course/Create"}>
-                <Button variant="contained" color="success" sx={{ marginBottom: `20px` }}>
-                    Add
-                </Button>
-
-            </Link>
-        </Toolbar >
-        <Modal open={open}
-            onClose={handleOpen}>
-            <Box sx={ModalBoxStyle}>
-                <Typography id="modal-modal-title" variant="h5" component="h6" sx={{ marginBottom: "15px" }}>
-                    Are you sure ?
-                </Typography>
-                <Grid container direction="row-reverse">
-                    <Grid item>
-                        <Button variant="outlined" color="error" onClick={handleOpen}>
-                            Cancel
-                        </Button>
-                    </Grid>
-                    <Grid item sx={{ mr: '5px' }}>
-
-
-                        <Button variant="contained" color="error" onClick={handleSubmit}>
-                            Delete
-                        </Button>
-
-                    </Grid>
-
-
-                </Grid>
-            </Box>
-        </Modal>
-        <Paper sx={{ width: '100%', overflow: 'hidden', borderRadius: '20px' }}>
-            <TableContainer sx={{ maxHeight: 440 }}>
-                <Table  >
-                    <TableHead>
-                        <TableRow>
-                            <TableCell >
-                                Course Id
-                            </TableCell>
-                            <TableCell>
-                                Name
-                            </TableCell>
-                            <TableCell>
-                                Credits
-                            </TableCell>
-
-
-                            <TableCell>
-                                Action
-                            </TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {apiData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((item) => {
-                            return (
-                                <TableRow hover key={item.id}>
-                                    <TableCell>
-                                        {(item?.id)}
-                                    </TableCell>
-                                    <TableCell>
-                                        {item?.courseName}
-                                    </TableCell>
-                                    <TableCell>
-                                        {item?.credits}
-                                    </TableCell>
-
-
-                                    <TableCell>
-                                        <Link to={`/Admin/Course/Edit/${item?.id}`}>
-                                            <Button sx={{ margin: "4px" }} variant="contained" >
-                                                <BsPencilSquare title='Edit'></BsPencilSquare>
-                                            </Button>
-                                        </Link>
-                                        <Button variant="contained" color="error" onClick={() => handleClick(item?.id)}>
-                                            <FaTrash title='Delete'></FaTrash>
-                                        </Button>
-                                    </TableCell>
-                                </TableRow>
-                            )
-
-                        })}
-                    </TableBody>
-                </Table>
-            </TableContainer>
-            <TablePagination
-                rowsPerPageOptions={[10, 25, 100]}
-                component="div"
-                count={apiData.length}
-                rowsPerPage={rowsPerPage}
-                page={page}
-                onPageChange={handleChangePage}
-                onRowsPerPageChange={handleChangeRowsPerPage}
-            />
-        </Paper>
+      <div className="table-container">
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell className="border-r-2 border-gray-200">S.N</TableCell>
+              <TableCell>Name</TableCell>
+              <TableCell>Id</TableCell>
+              <TableCell>Credits</TableCell>
+              <TableCell>Action</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {apiData
+              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              .map((item, index) => (
+                <TableRow hover key={item.id}>
+                  <TableCell className="border-r-2 border-gray-200 w-2">
+                    {index + 1}
+                  </TableCell>
+                  <TableCell>{item.name}</TableCell>
+                  <TableCell>{item.id}</TableCell>
+                  <TableCell>{item.credits}</TableCell>
+                  <TableCell>
+                    <Link to={`/Admin/Course/Edit/${item.id}`}>
+                      <Button sx={{ margin: "4px" }} variant="contained">
+                        <BsPencilSquare title="Edit" />
+                      </Button>
+                    </Link>
+                    <Button
+                      variant="contained"
+                      color="error"
+                      onClick={() => handleEditClick(item.id)}
+                    >
+                      <FaTrash title="Delete" />
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+          </TableBody>
+        </Table>
+        <TablePagination
+          rowsPerPageOptions={[10, 25, 50]}
+          component="div"
+          count={apiData.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
+      </div>
     </>
-    );
+  );
 }

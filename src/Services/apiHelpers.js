@@ -2,15 +2,16 @@ import axios from "axios";
 import { store } from "../redux/store";
 // const baseUrl = "https://ourlibraryapi.azurewebsites.net/api";
 const baseUrl = "https://localhost:8000/api";
+// const baseUrl = "https://localhost:7098/api";
 
 export const urls = {
   courseUrl: `${baseUrl}/admin/course`,
-  studentUrl: `${baseUrl}/admin/Student`,
-  categoryUrl: `${baseUrl}/admin/Category`,
-  bookUrl: `${baseUrl}/admin/Book`,
-  transactionUrl: `${baseUrl}/admin/Transaction`,
-  commonUrl: `${baseUrl}/Common`,
-  dashboardUrl: `${baseUrl}/Dashboard`,
+  studentUrl: `${baseUrl}/admin/student`,
+  categoryUrl: `${baseUrl}/admin/category`,
+  bookUrl: `${baseUrl}/admin/book`,
+  transactionUrl: `${baseUrl}/admin/transaction`,
+
+  dashboardUrl: `${baseUrl}/dashboard`,
 };
 
 export const authApi = async (method, url, data) => {
@@ -41,7 +42,7 @@ export const googleSignUpApi = async (method, url, data) => {
 };
 
 export const signUpApi = async (method, url, data) => {
-  debugger;
+  
   let response = await axios({
     method,
     url: `${baseUrl}${url}`,
@@ -57,7 +58,7 @@ export const courseApi = async (method, url, data) => {
     url: `${urls.courseUrl}${url}`,
     data,
     headers: {
-      Authorization: `Bearer ${token.userDetail.user?.data?.token}`,
+      Authorization: `Bearer `+`${token.userDetail.user?.data?.token}`,
     },
   });
   return response.data;
@@ -127,15 +128,3 @@ export const categoryApi = async (method, url, data) => {
   return response.data;
 };
 
-export const commonApi = async (method, url, data) => {
-  const token = store.getState();
-  let response = await axios({
-    method,
-    url: `${urls.commonUrl}${url}`,
-    data,
-    headers: {
-      Authorization: `Bearer ${token.userDetail.user?.data?.token}`,
-    },
-  });
-  return response.data;
-};

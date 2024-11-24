@@ -23,13 +23,13 @@ export default function StudentIndex() {
 
     
     const handleClick = (id) => {
-        debugger
+        
         setId(id);
         handleOpen();
     }
 
     const handleSubmit = () => {
-        debugger
+        
         deleteStudentService(id)
             .then((response) => {
                 if (response.status) {

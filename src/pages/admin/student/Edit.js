@@ -28,7 +28,6 @@ import {
 import dayjs from "dayjs";
 import { DatePicker } from "@mui/x-date-pickers";
 import { courseService } from "../../../Services/apiServices/course/courseServices";
-import { genderService } from "../../../Services/apiServices/common/gender/genderService";
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup';
 
@@ -84,11 +83,7 @@ export default function EditStudent() {
   const [genderList, setGenderList] = useState([]);
   useEffect(() => {
     let genderData = () => {
-      genderService().then((response) => {
-        if (response.status) {
-          setGenderList(response.data);
-        }
-      });
+   
     };
     genderData();
   }, [apiData]);
@@ -131,7 +126,7 @@ export default function EditStudent() {
 
   const onSubmit = async (data) => {
     try {
-      debugger;
+      ;
       if (isSubmitting) return;
       const response = await editStudentService(data);
       if (response.status === true) {

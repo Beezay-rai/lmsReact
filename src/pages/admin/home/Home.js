@@ -12,13 +12,14 @@ import {
 } from "chart.js";
 import { Bar, Line, Doughnut } from "react-chartjs-2";
 import styled from "@emotion/styled";
-import { Grid, Typography } from "@mui/material";
+import { Button, Grid, TextField, Typography } from "@mui/material";
 import { FaHome, FaWrench } from "react-icons/fa";
 import { GiBlackBook } from "react-icons/gi";
 import { PiStudentLight } from "react-icons/pi";
 import { AiOutlineSmile } from "react-icons/ai";
 import { dashboardService } from "../../../Services/apiServices/dashboard/dashboardService";
 import randomColor from "randomcolor";
+import { MyChatHub } from "../../../components/services/chathub";
 ChartJs.register(
   BarElement,
   CategoryScale,
@@ -37,7 +38,7 @@ export default function Home() {
     let dashboardData = () => {
       dashboardService().then((response) => {
         if (response.data) {
-          debugger;
+          ;
           setApiData(response.data.data);
           setDonutData({
             ...donutData,
@@ -223,6 +224,12 @@ export default function Home() {
           <div className="p-3 bg-white rounded-2xl">
             <Doughnut data={donutData} options={donutOptions}></Doughnut>
           </div>
+        </Grid>
+
+        <Grid item sx={4}>
+
+         <MyChatHub/>
+       
         </Grid>
       </Grid>
     </>
