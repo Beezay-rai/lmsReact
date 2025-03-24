@@ -12,7 +12,7 @@ export const googleLoginService = async (data) => {
 export const googleSignUpService = async (data) => {
     ;
     let response = await googleSignUpApi(
-        "",
+        "POST",
         "",
         data
     );
