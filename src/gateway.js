@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 import Login from "./pages/auth/login";
 import SignUp from "./pages/auth/signUp";
@@ -77,5 +77,6 @@ export default function Gateway() {
         />
       </Route>
     </Routes>
+
   );
 }
