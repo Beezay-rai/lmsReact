@@ -1,12 +1,10 @@
-import { authApi } from "../../apiHelpers"
-import apiUrls from "../../apiUrls"
+import { authApi } from "../../apiHelpers";
 
-export const loginUser = async (data)=>{
-    
-    let response =  await authApi(
-        apiUrls.auth.loginUser.method,
-        apiUrls.auth.loginUser.url,
-        data
-    );
-    return response;
-}
+export const loginUserService = async (data) => {
+    try {
+        return await authApi(data);
+    } catch (error) {
+        console.error("Login error:", error);
+        throw error; 
+    }
+};

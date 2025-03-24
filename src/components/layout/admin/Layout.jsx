@@ -21,7 +21,6 @@ export default function AdminLayout({ children }) {
 
 
   const navBarHeight = "60px";
-
   return (
     <>
       <NavBar />
@@ -29,7 +28,8 @@ export default function AdminLayout({ children }) {
 
       <Box
         component="main"
-        className={`mt-1 mr-1 md:ml-[255px] lg:ml-[255px] sm:ml-0`}
+        // className={`mt-1 mr-1 md:ml-[255px] lg:ml-[255px] sm:ml-0 bg-red-50`}
+        className={`mt-1 mr-1 md:ml-[255px] lg:ml-[255px] sm:ml-0 `}
       >
         {children}
       </Box>

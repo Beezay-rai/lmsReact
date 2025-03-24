@@ -5,10 +5,10 @@ import { FaFacebook, FaTwitter } from 'react-icons/fa'
 import { FcGoogle } from 'react-icons/fc'
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { signUp } from "../../Services/apiServices/auth/signUpService";
 import { toast } from "react-toastify";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { signUpUserService } from "../../services/apiServices/auth/signUpService";
 
 export default function SignUp() {
     const schema = yup.object().shape({
@@ -30,22 +30,19 @@ export default function SignUp() {
         setIsHovered(!isHovered);
     }
     
-    
-    
+
     const onSubmit = async (data)=>{
         if(isSubmitting) return;
-        signUp(data).then((response)=>{
-            
-            if(response.status){
-                toast.success(("Signed Up Sucessfully !!"),{
-                    autoClose:3000
-                })
-                navigate("/Login")
-            }
-            else{
-                toast.error("Sign up Failed")
-            }
-        })
+        var response  = await signUpUserService(data);
+        if(response.status){
+            toast.success(("Signed Up Sucessfully !!"),{
+                autoClose:3000
+            })
+            navigate("/Login")
+        }
+        else{
+            toast.error("Sign up Failed")
+        }
     }
     return (
         <>

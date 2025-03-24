@@ -14,7 +14,6 @@ import EditStudent from "./pages/admin/student/Edit";
 import CategoryIndex from "./pages/admin/category/CategoryIndex";
 import CreateCategory from "./pages/admin/category/Create";
 import EditCategory from "./pages/admin/category/Edit";
-import Book from "./pages/admin/book/Book";
 import CreateBook from "./pages/admin/book/Create";
 import EditBook from "./pages/admin/book/Edit"
 import CreateTransaction from "./pages/admin/transaction/Create";
@@ -22,12 +21,13 @@ import Transaction from "./pages/admin/transaction/TransactionIndex";
 import EditTransaction from "./pages/admin/transaction/Edit";
 import Home from "./pages/admin/home/Home";
 import Error from "./pages/shared/error";
+import BookIndex from "./pages/admin/book/BookIndex";
 
 export default function Gateway() {
   return (
     <Routes>
       <Route exact path="/*" element={<Error />} />
-      <Route path="/login" element={<Login />} />
+      <Route path="/Login" element={<Login />} />
       <Route path="/SignUp" element={<SignUp />} />
       <Route element={<PrivateRoute />}>
         <Route path="/" element={<Home />} />
@@ -59,7 +59,7 @@ export default function Gateway() {
         />
 
         {/* Book */}
-        <Route exact path="/Admin/Book" element={<Book />} />
+        <Route exact path="/Admin/Book" element={<BookIndex />} />
         <Route exact path="/Admin/Book/Create" element={<CreateBook />} />
         <Route exact path="/Admin/Book/Edit/:id" element={<EditBook />} />
 

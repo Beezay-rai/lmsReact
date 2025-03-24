@@ -1,18 +1,17 @@
 import { studentApi } from "../../apiHelpers";
-import apiUrls from "../../apiUrls";
 
 export const studentService = async ()=>{
     let response = await studentApi(
-        apiUrls.student.student.method,
-        apiUrls.student.student.url
+     "GET",
+        ""
     );
     return response;
 };
 
 export const createStudentService = async (data)=>{
     let response = await studentApi(
-        apiUrls.student.createStudent.method,
-        apiUrls.student.createStudent.url,
+       "POST",
+        "",
         data
     );
     return response;
@@ -21,10 +20,10 @@ export const createStudentService = async (data)=>{
 
 
 
-export const editStudentService = async(data)=>{
+export const editStudentService = async(data,id)=>{
     let response = await studentApi(
-        apiUrls.student.editStudent.method,
-        apiUrls.student.editStudent.url ,
+      "PUT",
+        "/"+id,
         data
     );
     return response;
@@ -33,8 +32,8 @@ export const editStudentService = async(data)=>{
 export const deleteStudentService = async(id)=>{
     
     let response = await studentApi(
-        apiUrls.student.deleteStudent.method,
-        apiUrls.student.deleteStudent.url +"?id="+id,
+      "Delete",
+      "/="+id,
     );
     return response
 
@@ -42,8 +41,8 @@ export const deleteStudentService = async(id)=>{
 
 export const studentByIdService = async (id)=>{
     let response = await studentApi(
-        apiUrls.student.studentById.method,
-        apiUrls.student.studentById.url+"?id="+id ,
+      "GET",
+       "/"+id ,
         
     )
     return response

@@ -1,13 +1,10 @@
 import { signUpApi } from "../../apiHelpers";
-import apiUrls from "../../apiUrls";
 
-export const signUp = async (data) => {
-    let response =await signUpApi(
-        apiUrls.auth.signUp.method,
-        apiUrls.auth.signUp.url,
-        data
-    )
-    return response
-}
-
-
+export const signUpUserService = async (data) => {
+    try {
+        return await signUpApi(data);
+    } catch (error) {
+        console.error("Login error:", error);
+        throw error; 
+    }
+};

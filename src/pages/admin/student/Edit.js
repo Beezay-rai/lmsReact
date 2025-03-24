@@ -24,10 +24,10 @@ import { useState, useEffect } from "react";
 import {
   editStudentService,
   studentByIdService,
-} from "../../../Services/apiServices/student/studentService";
+} from "../../../services/apiServices/student/studentService";
 import dayjs from "dayjs";
 import { DatePicker } from "@mui/x-date-pickers";
-import { courseService } from "../../../Services/apiServices/course/courseServices";
+import { courseService } from "../../../services/apiServices/course/courseServices";
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup';
 

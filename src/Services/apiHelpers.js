@@ -1,130 +1,46 @@
 import axios from "axios";
 import { store } from "../redux/store";
-// const baseUrl = "https://ourlibraryapi.azurewebsites.net/api";
-const baseUrl = "https://localhost:8000/api";
-// const baseUrl = "https://localhost:7098/api";
 
+const baseUrl = "http://my-lms.runasp.net/api";
+// // const baseUrl = "https://ourlibraryapi.azurewebsites.net/api";
+// // const baseUrl = "https://localhost:8000/api";
+// // const baseUrl = "https://localhost:7098/api";
+// const baseUrl = "http://my-lms.runasp.net/api";
 export const urls = {
-  courseUrl: `${baseUrl}/admin/course`,
-  studentUrl: `${baseUrl}/admin/student`,
-  categoryUrl: `${baseUrl}/admin/category`,
-  bookUrl: `${baseUrl}/admin/book`,
-  transactionUrl: `${baseUrl}/admin/transaction`,
-
+  loginUrl: `${baseUrl}/v1/auth/login`,
+  signUpUserUrl: `${baseUrl}/v1/users`,
+  courseUrl: `${baseUrl}/v1/courses`,
+  studentUrl: `${baseUrl}/v1/student`,
+  categoryUrl: `${baseUrl}/v1/categories`,
+  bookUrl: `${baseUrl}/v1/book`,
+  transactionUrl: `${baseUrl}/v1/transaction`,
   dashboardUrl: `${baseUrl}/dashboard`,
 };
 
-export const authApi = async (method, url, data) => {
-  let response = await axios({
+const apiRequest = async (method, url, data, requiresAuth = false) => {
+  const config = {
     method,
-    url: `${baseUrl}${url}`,
+    url,
     data,
-  });
-  return response.data;
-};
+  };
+  if (requiresAuth) {
+    const token = store.getState().userDetail.user?.data?.token;
+    config.headers = {
+      Authorization: `Bearer ${token}`,
+    };
+  }
 
-export const googleLoginApi = async (method, url, data) => {
-  let response = await axios({
-    method,
-    url: `${baseUrl}${url}`,
-    data,
-  });
-  return response.data;
-};
-
-export const googleSignUpApi = async (method, url, data) => {
-  let response = await axios({
-    method,
-    url: `${baseUrl}${url}`,
-    data,
-  });
-  return response.data;
-};
-
-export const signUpApi = async (method, url, data) => {
-  
-  let response = await axios({
-    method,
-    url: `${baseUrl}${url}`,
-    data,
-  });
-  return response.data;
-};
-
-export const courseApi = async (method, url, data) => {
-  const token = store.getState();
-  let response = await axios({
-    method,
-    url: `${urls.courseUrl}${url}`,
-    data,
-    headers: {
-      Authorization: `Bearer `+`${token.userDetail.user?.data?.token}`,
-    },
-  });
-  return response.data;
-};
-
-export const transactionApi = async (method, url, data) => {
-  const token = store.getState();
-  let response = await axios({
-    method,
-    url: `${urls.transactionUrl}${url}`,
-    data,
-    headers: {
-      Authorization: `Bearer ${token.userDetail.user?.data?.token}`,
-    },
-  });
-  return response.data;
-};
-
-export const bookApi = async (method, url, data) => {
-  const token = store.getState();
-  let response = await axios({
-    method,
-    url: `${urls.bookUrl}${url}`,
-    data,
-    headers: {
-      Authorization: `Bearer ${token.userDetail.user?.data?.token}`,
-    },
-  });
-  return response.data;
-};
-
-export const studentApi = async (method, url, data) => {
-  const token = store.getState();
-  let response = await axios({
-    method,
-    url: `${urls.studentUrl}${url}`,
-    data,
-    headers: {
-      Authorization: `Bearer ${token.userDetail.user?.data?.token}`,
-    },
-  });
-  return response.data;
-};
-export const dashboardApi = async (method, url, data) => {
-  const token = store.getState();
-  let response = await axios({
-    method,
-    url: `${urls.dashboardUrl}${url}`,
-    data,
-    headers: {
-      Authorization: `Bearer ${token.userDetail.user?.data?.token}`,
-    },
-  });
+  let response = await axios(config);
   return response;
 };
 
-export const categoryApi = async (method, url, data) => {
-  const token = store.getState();
-  let response = await axios({
-    method,
-    url: `${urls.categoryUrl}${url}`,
-    data,
-    headers: {
-      Authorization: `Bearer ${token.userDetail.user?.data?.token}`,
-    },
-  });
-  return response.data;
-};
-
+export const authApi = ( data) => apiRequest("POST", `${baseUrl}${urls.loginUrl}`, data);
+export const signUpApi = ( data) => apiRequest("POST", `${baseUrl}${urls.signUpUserUrl}`, data);
+export const googleLoginApi = (method, url, data) => apiRequest(method, `${baseUrl}${url}`, data);
+export const googleSignUpApi = (method, url, data) => apiRequest(method, `${baseUrl}${url}`, data);
+export const courseApi = (method, url, data) => apiRequest(method, `${urls.courseUrl}${url}`, data, true);
+export const transactionApi = (method, url, data) => apiRequest(method, `${urls.transactionUrl}${url}`, data, true);
+export const bookApi = (method, url, data) => apiRequest(method, `${urls.bookUrl}${url}`, data, true);
+export const studentApi = (method, url, data) => apiRequest(method, `${urls.studentUrl}${url}`, data, true);
+export const dashboardApi = (method, url, data) => apiRequest(method, `${urls.dashboardUrl}${url}`, data, true);
+export const categoryApi = (method, url, data) => apiRequest(method, `${urls.categoryUrl}${url}`, data, true);

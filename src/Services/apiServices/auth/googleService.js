@@ -1,20 +1,19 @@
-import {  googleLoginApi, googleSignUpApi } from "../../apiHelpers"
-import apiUrls from "../../apiUrls"
+import { googleLoginApi, googleSignUpApi as googleSignUpApi } from "../../apiHelpers"
 
-export const googleLogin = async (data)=>{
+export const googleLoginService = async (data) => {
     ;
-    let response =  await googleLoginApi(
-        apiUrls.auth.googleLogin.method,
-        apiUrls.auth.googleLogin.url+"?token="+data,
-        
+    let response = await googleLoginApi(
+        "",
+        "?token=" + data,
+
     );
     return response;
 }
-export const googleSignUp = async (data)=>{
+export const googleSignUpService = async (data) => {
     ;
-    let response =  await googleSignUpApi(
-        apiUrls.auth.googleSignUpApi.method,
-        apiUrls.auth.googleSignUpApi.url,
+    let response = await googleSignUpApi(
+        "",
+        "",
         data
     );
     return response;

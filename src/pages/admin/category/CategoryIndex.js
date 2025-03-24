@@ -17,7 +17,7 @@ import { Link } from "react-router-dom";
 import {
   deleteCategoryService,
   categoryService,
-} from "../../../Services/apiServices/category/categoryServices";
+} from "../../../services/apiServices/category/categoryServices";
 import { toast } from "react-toastify";
 
 export default function CategoryIndex() {

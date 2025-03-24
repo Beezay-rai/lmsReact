@@ -16,10 +16,10 @@ import { FaFacebook, FaTwitter } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { googleLogin } from "../../Services/apiServices/auth/googleService";
-import { loginUser } from "../../Services/apiServices/auth/loginService";
 import img from "../../assests/img/asdf.png";
 import { setIsLoading, setUserDetail } from "../../redux/appSlices";
+import { loginUserService } from "../../services/apiServices/auth/loginService";
+import { googleLoginService } from "../../services/apiServices/auth/googleService";
 
 export default function Login() {
   const {
@@ -37,56 +37,74 @@ export default function Login() {
   const appState = useSelector((state) => state.appFeature);
 
   const googleResponse = async (response) => {
-    googleLogin(response.credential)
-      .then((apiResponse) => {
-        if (apiResponse.status === true) {
-          dispatch(setIsLoading(false));
-          dispatch(setUserDetail(apiResponse));
-          toast.success(`${apiResponse.data.name} Logged in Successfully`, {
-            icon: "🚀",
-            autoClose: 2000,
-            position: "top-right",
-          });
-          navigate("/");
-        } else {
-          toast.error(apiResponse.message, {
-            autoClose: 1000,
-          });
-        }
-      })
-      .catch(() => {
-        toast.error("Login Failure", {
-          autoClose: 3000,
-        });
+    
+    var myApiPresponse  =await googleLoginService(response.credential);
+    if(myApiPresponse.status){
+      dispatch(setUserDetail(myApiPresponse));
+      toast.success(` Logged in Successfully`, {
+        icon: "🚀",
+        autoClose: 2000,
+        position: "top-right",
       });
+      navigate("/");
+    }
+    else{
+      toast.error("Login Failure", {
+        autoClose: 3000,
+      });
+    }
   };
 
+  
   const onSubmit = async (data) => {
     dispatch(setIsLoading(true));
     if (isSubmitting) return;
-    loginUser(data)
-      .then((response) => {
-        if (response.status === true) {
-          dispatch(setUserDetail(response));
-          toast.success(`${response.data.name} Logged in Successfully`, {
-            icon: "🚀",
-            autoClose: 2000,
-            position: "top-right",
-          });
-          navigate("/");
-        } else {
-          toast.error(response.message, {
-            autoClose: 1000,
-          });
-        }
-      })
-      .catch(() => {
-        toast.error("Login Failure", {
-          autoClose: 3000,
-        });
+    var loginResponse =await loginUserService(data);
+    if(loginResponse.status){
+      dispatch(setUserDetail(loginResponse));
+      toast.success(`${loginResponse.data.name} Logged in Successfully`, {
+        icon: "🚀",
+        autoClose: 2000,
+        position: "top-right",
       });
+      navigate("/");
+    }
+    else{
+      toast.error("Login Failure", {
+        autoClose: 3000,
+      });
+    }
     dispatch(setIsLoading(false));
   };
+
+  // const onSubmit = async (data) => {
+  //   dispatch(setIsLoading(true));
+  //   if (isSubmitting) return;
+  //   var loginResponse =await  (data);
+
+  //   if (loginResponse) {
+  //     if(loginResponse.status){
+  //       dispatch(setUserDetail(loginResponse));
+  //       toast.success(`${loginResponse.data.name} Logged in Successfully`, {
+  //         icon: "🚀",
+  //         autoClose: 2000,
+  //         position: "top-right",
+  //       });
+  //       navigate("/");
+  //     }
+  //     else{
+  //       toast.error("Login Failure", {
+  //         autoClose: 3000,
+  //       });
+  //     }
+      
+  //   } else {
+  //     toast.error("Login Failure", {
+  //       autoClose: 3000,
+  //     });
+  //   }
+  //   dispatch(setIsLoading(false));
+  // };
 
   return (
     <Box className="flex justify-center mt-10 m-auto   bg-white border  w-4/5   shadow-2xl rounded-2xl">
@@ -164,16 +182,17 @@ export default function Login() {
                     type="submit"
                     variant="contained"
                     sx={{ textTransform: `none` }}
+                    disabled={isSubmitting}
                   >
                     {isSubmitting || appState.isLoading
                       ? "Signing in.."
                       : "Sign In"}
                   </Button>
                 </div>
-                <div className="mt-5">
-                  <Divider
-                    sx={{ fontSize: "15px", color: "rgba(0, 0, 0, 0.12)" }}
+                <div className="my-5">
+                  <Divider sx={{margin:"10px"}}
                   />
+                  
 
                   <div className="social flex justify-center">
                     <FaFacebook

@@ -13,7 +13,7 @@ import { SInputField, TextArea } from '../../../components/styles/Styles';
 import { IoIosArrowRoundBack } from 'react-icons/io';
 import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
-import { createCourseService } from '../../../Services/apiServices/course/courseServices';
+import { createCourseService } from '../../../services/apiServices/course/courseServices';
 import { toast } from 'react-toastify';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -62,9 +62,7 @@ export default function CreateCourse() {
         </div>
 
         <div className="bg-white p-5 mt-2 rounded">
-          <Box
-            component="form"
-            sx={{ padding: '10px' }}
+          <form
             onSubmit={handleSubmit(onSubmit)}
           >
             <FormGroup sx={{ flexDirection: 'row' }}>
@@ -137,7 +135,7 @@ export default function CreateCourse() {
                 Submit
               </Button>
             </Stack>
-          </Box>
+          </form>
         </div>
       </div>
     </>

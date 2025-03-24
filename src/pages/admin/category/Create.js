@@ -5,7 +5,7 @@ import { SInputField } from '../../../components/styles/Styles';
 import { IoIosArrowRoundBack } from 'react-icons/io';
 import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
-import { createCategoryService } from '../../../Services/apiServices/category/categoryServices';
+import { createCategoryService } from '../../../services/apiServices/category/categoryServices';
 import { toast } from 'react-toastify';
 
 export default function CreateCategory() {

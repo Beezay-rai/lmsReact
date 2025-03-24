@@ -11,7 +11,7 @@ import { Box, Button, Grid, Modal, Toolbar, Typography } from '@mui/material';
 import { FaTrash } from 'react-icons/fa'
 import { BsPencilSquare } from 'react-icons/bs'
 import { Link } from 'react-router-dom';
-import { deleteStudentService, studentService } from '../../../Services/apiServices/student/studentService';
+import { deleteStudentService, studentService } from '../../../services/apiServices/student/studentService';
 import { toast } from 'react-toastify';
 export default function StudentIndex() {
     const [page, setPage] = useState(0);

@@ -1,18 +1,18 @@
 import { bookApi } from "../../apiHelpers";
-import apiUrls from "../../apiUrls";
 
-export const bookService = async ()=>{
+
+export const getAllBooks = async () => {
     let response = await bookApi(
-        apiUrls.book.book.method,
-        apiUrls.book.book.url
+        "GET",
+        ""
     );
     return response;
 };
 
-export const createBookService = async (data)=>{
+export const createBook = async (data) => {
     let response = await bookApi(
-        apiUrls.book.createBook.method,
-        apiUrls.book.createBook.url,
+        "POST",
+        "",
         data
     );
     return response;
@@ -20,30 +20,29 @@ export const createBookService = async (data)=>{
 }
 
 
-export const editBookService = async(data)=>{
+export const updateBook = async (id, data) => {
     let response = await bookApi(
-        apiUrls.book.editBook.method,
-        apiUrls.book.editBook.url ,
+        "PUT",
+        "/" + id,
         data
     );
     return response;
 }
 
-export const deleteBookService = async(id)=>{
-    
+export const deleteBook = async (id) => {
+
     let response = await bookApi(
-        apiUrls.book.deleteBook.method,
-        apiUrls.book.deleteBook.url +"?id="+id,
+        "DELETE",
+        +"/" + id,
     );
     return response
 
 }
 
-export const bookByIdService = async (id)=>{
+export const getBookById = async (id) => {
     let response = await bookApi(
-        apiUrls.book.bookById.method,
-        apiUrls.book.bookById.url+"?id="+id ,
-        
+        "GET",
+        "/" + id,
     )
     return response
 }

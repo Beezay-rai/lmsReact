@@ -14,13 +14,12 @@ import {
 import { FaTrash } from "react-icons/fa";
 import { BsPencilSquare } from "react-icons/bs";
 import { Link } from "react-router-dom";
-import {
-  deleteCourseService,
-  courseService,
-} from "../../../services/apiServices/course/courseServices";
+
 import { toast } from "react-toastify";
 
-export default function CourseIndex() {
+import { deleteBook, getAllBooks } from '../../../services/apiServices/book/bookServices'
+
+export default function BookIndex() {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [apiData, setApiData] = useState([]);
@@ -35,7 +34,7 @@ export default function CourseIndex() {
 
   const handleDeleteSubmit = async () => {
     try {
-      const response = await deleteCourseService(id);
+      const response = await deleteBook(id);
       if (response.status) {
         toast.success("Deleted Successfully", { autoClose: 2000 });
         setChange(!change);
@@ -59,22 +58,22 @@ export default function CourseIndex() {
   };
 
   useEffect(() => {
-    const fetchCourses = async () => {
+    const fetchBooks = async () => {
       try {
-        const { status, data } = await courseService();
+        const { status, data } = await getAllBooks();
         setApiData(status ? data : []);
       } catch {
         setApiData([]);
       }
     };
-    fetchCourses();
+    fetchBooks();
   }, [change]);
 
   return (
     <>
       <div className="flex flex-row justify-between py-5 px-3 rounded bg-white mb-2">
-        <Typography variant="h5">Course</Typography>
-        <Link to="/Admin/Course/Create">
+        <Typography variant="h5">Book</Typography>
+        <Link to="/Admin/Book/Create">
           <Button variant="contained" color="success">
             + Add
           </Button>
@@ -112,7 +111,6 @@ export default function CourseIndex() {
               <TableCell className="border-r-2 border-gray-200">S.N</TableCell>
               <TableCell>Name</TableCell>
               <TableCell>Id</TableCell>
-              <TableCell>Credits</TableCell>
               <TableCell>Action</TableCell>
             </TableRow>
           </TableHead>
@@ -126,9 +124,8 @@ export default function CourseIndex() {
                   </TableCell>
                   <TableCell>{item.name}</TableCell>
                   <TableCell>{item.id}</TableCell>
-                  <TableCell>{item.credits}</TableCell>
                   <TableCell>
-                    <Link to={`/Admin/Course/Edit/${item.id}`}>
+                    <Link to={`/Admin/Book/Edit/${item.id}`}>
                       <Button sx={{ margin: "4px" }} variant="contained">
                         <BsPencilSquare title="Edit" />
                       </Button>

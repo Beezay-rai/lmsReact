@@ -23,9 +23,8 @@ import { toast } from "react-toastify";
 import { useEffect, useState } from "react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import {
-  SignUpService,
-  signUp,
-} from "../../../Services/apiServices/auth/signUpService";
+  signUpUserService,
+} from "../../../services/apiServices/auth/signUpService";
 import * as yup from "yup";
 export default function CreateUser() {
   const schema = yup.object().shape({
@@ -64,7 +63,7 @@ export default function CreateUser() {
     try {
         
       if (isSubmitting) return;
-      const response = await signUp(data);
+      const response = await signUpUserService(data);
       if (response.status === true) {
         toast.success(response.message, {
           autoclose: 1000,

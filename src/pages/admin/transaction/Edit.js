@@ -7,11 +7,11 @@ import { SInputField } from '../../../components/styles/Styles';
 import { IoIosArrowRoundBack } from 'react-icons/io'
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
-import { createTransactionService, editTransactionService, transactionByIdService } from '../../../Services/apiServices/transaction/transactionServices';
+import { createTransactionService, editTransactionService, transactionByIdService } from '../../../services/apiServices/transaction/transactionServices';
 import { toast } from 'react-toastify';
 import { useState, useEffect } from 'react';
-import { bookService } from '../../../Services/apiServices/book/bookServices';
-import { studentService } from '../../../Services/apiServices/student/studentService';
+import { getAllBooks } from '../../../services/apiServices/book/bookServices';
+import { studentService } from '../../../services/apiServices/student/studentService';
 import { DatePicker } from '@mui/x-date-pickers';
 import dayjs from 'dayjs';
 
@@ -55,7 +55,7 @@ export default function EditTransaction() {
     useEffect(() => {
         if (apiData.id > 0) {
             let bookData = async () => {
-                await bookService().then((response) => {
+                await getAllBooks().then((response) => {
                     setBookList(response.data)
                 })
             }
