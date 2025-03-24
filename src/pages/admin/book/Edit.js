@@ -40,7 +40,7 @@ export default function EditBook() {
   const { id } = useParams();
   useEffect(() => {
     let fetchData = async () => {
-      await bookByIdService(id).then((response) => {
+      await getBookById(id).then((response) => {
         setApiData(response.data);
       });
     };
