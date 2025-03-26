@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const userState = {
   user: "",
 };
-//#region User Detail
+
 export const userSlice = createSlice({
   name: "User Detail",
   initialState: userState,
@@ -16,11 +16,13 @@ export const userSlice = createSlice({
     },
   },
 });
-//#endregion
 
-//#region AppStates
 const appState = {
   isLoading: false,
+  dialogState: {
+    open: false,
+    onConfirm: null,
+  },
 };
 export const appSlice = createSlice({
   name: "App Features",
@@ -29,13 +31,14 @@ export const appSlice = createSlice({
     setIsLoading: (state, action) => {
       state.isLoading = action.payload;
     },
+    setDialogState: (state, action) => {
+      state.dialogState.open = action.payload.open;
+      state.dialogState.onConfirm = action.payload.onConfirm;
+    },
   },
 });
 
-//#endregion 
-
-
-export const { setIsLoading } = appSlice.actions;
+export const { setIsLoading, setDialogState } = appSlice.actions;
 
 export const { logout } = userSlice.actions;
 

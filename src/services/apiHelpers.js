@@ -1,11 +1,11 @@
 import axios from "axios";
 import { store } from "../redux/store";
 
-const baseUrl = "http://my-lms.runasp.net/api";
+// const baseUrl = "http://my-lms.runasp.net/api";
 // // const baseUrl = "https://ourlibraryapi.azurewebsites.net/api";
 // // const baseUrl = "https://localhost:8000/api";
-// // const baseUrl = "https://localhost:7098/api";
-// const baseUrl = "http://my-lms.runasp.net/api";
+// const baseUrl = "https://localhost:7098/api";
+const baseUrl = "https://my-lms.runasp.net/api";
 export const urls = {
   loginUrl: `${baseUrl}/v1/auth/login`,
   signUpUserUrl: `${baseUrl}/v1/users`,
@@ -31,11 +31,11 @@ const apiRequest = async (method, url, data, requiresAuth = false) => {
   }
 
   let response = await axios(config);
-  return response;
+  return response.data;
 };
 
-export const authApi = ( data) => apiRequest("POST", `${baseUrl}${urls.loginUrl}`, data);
-export const signUpApi = ( data) => apiRequest("POST", `${baseUrl}${urls.signUpUserUrl}`, data);
+export const authApi = ( data) => apiRequest("POST", `${urls.loginUrl}`, data);
+export const signUpApi = ( data) => apiRequest("POST", `${urls.signUpUserUrl}`, data);
 export const googleLoginApi = (method, url, data) => apiRequest(method, `${baseUrl}${url}`, data);
 export const googleSignUpApi = (method, url, data) => apiRequest(method, `${baseUrl}${url}`, data);
 export const courseApi = (method, url, data) => apiRequest(method, `${urls.courseUrl}${url}`, data, true);
