@@ -4,20 +4,23 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Gateway from "./gateway.js";
 import "./styles/global.css";
-import DeleteDialog from "./components/ui/DeleteDialog.jsx";
+import { MyDialog } from "./components/ui/MyDialog.jsx";
 import { useSelector } from "react-redux";
+import { MyFunctionProvider } from "./components/context/MyFunctionContext.js";
+
 function App() {
-  const {isDialog,dialogState} = useSelector((state)=>state.appFeature)
-  debugger
+  const dialogState = useSelector((state) => state.appFeature.dialogState);
+
   return (
     <>
       <ToastContainer />
       <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <DeleteDialog open={dialogState.open} onConfirm={dialogState.onConfirm}/>
-        <Gateway />
+        <MyFunctionProvider>
+          <MyDialog open={dialogState.open} />
+          <Gateway />
+        </MyFunctionProvider>
       </LocalizationProvider>
     </>
   );
 }
-
 export default App;

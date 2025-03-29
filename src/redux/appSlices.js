@@ -20,8 +20,9 @@ export const userSlice = createSlice({
 const appState = {
   isLoading: false,
   dialogState: {
-    open: false,
-    onConfirm: null,
+    open: false
+
+    
   },
 };
 export const appSlice = createSlice({
@@ -32,8 +33,9 @@ export const appSlice = createSlice({
       state.isLoading = action.payload;
     },
     setDialogState: (state, action) => {
-      state.dialogState.open = action.payload.open;
-      state.dialogState.onConfirm = action.payload.onConfirm;
+      state.dialogState.open = action.payload.open; 
+      state.dialogState.relation = action.payload.relation; 
+
     },
   },
 });

@@ -31,7 +31,7 @@ export const editCategoryService = async (id, data) => {
 export const deleteCategoryService = async (id) => {
 
     let response = await categoryApi(
-        "",
+        "DELETE",
         "/" + id,
     );
     return response
