@@ -16,7 +16,7 @@ function App() {
       <ToastContainer />
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <MyFunctionProvider>
-          <MyDialog open={dialogState.open} />
+          <MyDialog open={dialogState.open} message={dialogState.message}  confirmText={dialogState.confirmText} title={dialogState.title} color={dialogState.color}/>
           <Gateway />
         </MyFunctionProvider>
       </LocalizationProvider>

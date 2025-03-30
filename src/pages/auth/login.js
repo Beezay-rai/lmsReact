@@ -60,7 +60,6 @@ export default function Login() {
     dispatch(setIsLoading(true));
     if (isSubmitting) return;
     var loginResponse =await loginUserService(data);
-    debugger;
     if(loginResponse.status){
       dispatch(setUserDetail(loginResponse));
       toast.success(`${loginResponse.data.name} Logged in Successfully`, {

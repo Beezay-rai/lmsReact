@@ -6,17 +6,16 @@ import {
   DialogContentText,
   DialogTitle,
 } from "@mui/material";
-import { setDialogState } from "../../redux/appSlices";
+import { closeDialog, setDialogState } from "../../redux/appSlices";
 import { useDispatch, useSelector } from "react-redux";
 import { useMyFunctionContext } from "../context/MyFunctionContext";
 
 export const MyDialog = ({ open, title = "Confirm Delete", message = "Are you sure you want to delete?", confirmText = "Delete", color = "error" }) => {
   const dispatch = useDispatch();
   const { myStoredFunction, storedParams } = useMyFunctionContext();
-  const { isLoading } = useSelector((state) => state.appFeature);
-
+  const { isLoading ,dialogState} = useSelector((state) => state.appFeature);
   const hideDialog = () => {
-    dispatch(setDialogState({ open: false }));
+    dispatch(closeDialog());
   };
 
   const handleConfirm = async () => { 

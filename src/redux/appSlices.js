@@ -20,9 +20,11 @@ export const userSlice = createSlice({
 const appState = {
   isLoading: false,
   dialogState: {
-    open: false
-
-    
+    open: false,
+    title: "Confirm Delete",
+    message: "Are you sure you want to delete?",
+    confirmText: "Delete",
+    color: "error"
   },
 };
 export const appSlice = createSlice({
@@ -33,14 +35,18 @@ export const appSlice = createSlice({
       state.isLoading = action.payload;
     },
     setDialogState: (state, action) => {
-      state.dialogState.open = action.payload.open; 
-      state.dialogState.relation = action.payload.relation; 
-
+      state.dialogState =action.payload; 
+    },
+    openDialog:(state, action) => {
+      state.dialogState.open =true;
+    },
+    closeDialog:(state, action) => {
+      state.dialogState.open =false;
     },
   },
 });
 
-export const { setIsLoading, setDialogState } = appSlice.actions;
+export const { setIsLoading, setDialogState,closeDialog,openDialog } = appSlice.actions;
 
 export const { logout } = userSlice.actions;
 
