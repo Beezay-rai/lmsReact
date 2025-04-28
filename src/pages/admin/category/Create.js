@@ -5,7 +5,7 @@ import { SInputField } from '../../../components/styles/Styles';
 import { IoIosArrowRoundBack } from 'react-icons/io';
 import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
-import { createCategoryService } from '../../../Services/apiServices/category/categoryServices';
+import { createCategoryService } from '../../../services/apiServices/category/categoryServices';
 import { toast } from 'react-toastify';
 
 export default function CreateCategory() {
@@ -17,6 +17,7 @@ export default function CreateCategory() {
       if (isSubmitting) return;
 
       const response = await createCategoryService(data);
+      debugger;
       if (response.status) {
         toast.success(response.message, { autoclose: 3000 });
         navigate("/Admin/Category");

@@ -7,11 +7,11 @@ import { SInputField } from '../../../components/styles/Styles';
 import { IoIosArrowRoundBack } from 'react-icons/io'
 import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
-import { createTransactionService } from '../../../Services/apiServices/transaction/transactionServices';
+import { createTransactionService } from '../../../services/apiServices/transaction/transactionServices';
 import { toast } from 'react-toastify';
 import { useState, useEffect } from 'react';
-import { bookService } from '../../../Services/apiServices/book/bookServices';
-import { studentService } from '../../../Services/apiServices/student/studentService';
+import { getAllBooks } from '../../../services/apiServices/book/bookServices';
+import { studentService } from '../../../services/apiServices/student/studentService';
 import { DatePicker } from '@mui/x-date-pickers';
 
 export default function CreateTransaction() {
@@ -34,7 +34,7 @@ export default function CreateTransaction() {
     //Book List
     useEffect(() => {
         let bookData = () => {
-            bookService().then((response) => {
+            getAllBooks().then((response) => {
                 setBookList(response.data)
             })
         }

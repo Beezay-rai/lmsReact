@@ -16,7 +16,7 @@ import { useForm } from "react-hook-form";
 import {
   editCourseService,
   courseByIdService,
-} from "../../../Services/apiServices/course/courseServices";
+} from "../../../services/apiServices/course/courseServices";
 import { toast } from "react-toastify";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -87,12 +87,10 @@ export default function EditCourse() {
       </div>
 
       <div className="bg-white p-5 mt-2 rounded">
-        <Box
-          component="form"
-          sx={{ padding: "10px" }}
+        <form
           onSubmit={handleSubmit(onSubmit)}
         >
-          <FormGroup sx={{ flexDirection: "row" }}>
+          <div sx={{ flexDirection: "row" }}>
             <SInputField>
               <FormControl>
                 <TextField
@@ -126,7 +124,7 @@ export default function EditCourse() {
                 />
               </FormControl>
             </SInputField>
-          </FormGroup>
+          </div>
 
           <FormGroup>
             <SInputField>
@@ -162,7 +160,7 @@ export default function EditCourse() {
               Submit
             </Button>
           </Stack>
-        </Box>
+        </form>
       </div>
     </div>
   );

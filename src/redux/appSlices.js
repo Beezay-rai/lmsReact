@@ -1,9 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const userState = {
-  user: "",
+  user: {
+    access_token: "",
+    refresh_token: "",  
+  },
 };
-//#region User Detail
+
 export const userSlice = createSlice({
   name: "User Detail",
   initialState: userState,
@@ -14,13 +17,24 @@ export const userSlice = createSlice({
     logout: (state) => {
       state.user = "";
     },
+    updateToken: (state, action) => {
+      state.user.access_token = action.payload.access_token;
+      state.user.refresh_token = action.payload.refresh_token;
+    },
   },
 });
-//#endregion
 
-//#region AppStates
 const appState = {
   isLoading: false,
+  dialogState: {
+    open: false,
+    title: "Confirm Delete",
+    message: "Are you sure you want to delete?",
+    confirmText: "Delete",
+    color: "error",
+    onConfirm: null,
+    params: []
+  },
 };
 export const appSlice = createSlice({
   name: "App Features",
@@ -29,16 +43,22 @@ export const appSlice = createSlice({
     setIsLoading: (state, action) => {
       state.isLoading = action.payload;
     },
+    setDialogState: (state, action) => {
+      state.dialogState =action.payload; 
+    },
+    openDialog:(state, action) => {
+      state.dialogState.open =true;
+    },
+    closeDialog:(state, action) => {
+      state.dialogState.open =false;
+    },
   },
 });
 
-//#endregion 
-
-
-export const { setIsLoading } = appSlice.actions;
+export const { setIsLoading, setDialogState,closeDialog,openDialog } = appSlice.actions;
 
 export const { logout } = userSlice.actions;
 
-export const { setUserDetail } = userSlice.actions;
+export const { setUserDetail,updateToken } = userSlice.actions;
 
 export default userSlice.reducer;

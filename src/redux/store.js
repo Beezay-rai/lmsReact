@@ -1,28 +1,32 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import storage from "redux-persist/lib/storage";
-import userReducer, { appSlice } from "./appSlices";
+import  { appSlice, userSlice } from "./appSlices";
+import { persistReducer, persistStore } from "redux-persist";
+import { FLUSH, PAUSE, PERSIST, PURGE, REGISTER, REHYDRATE } from "redux-persist/es/constants";
 
-import { persistReducer } from "redux-persist";
-import persistStore from "redux-persist/es/persistStore";
-
-const persitConfig = {
-  key: "storeTookit",
+const persistConfig = {
+  key: "storeToolkit",
   version: 1,
   storage,
-  timeout: 10,
+  blacklist: ['appFeature'] // prevents userDetail from being persisted/rehydrated
+
 };
 
 const reducer = combineReducers({
-  userDetail: userReducer,
+  userDetail: userSlice.reducer,
   appFeature: appSlice.reducer,
 });
 
-const persistedReducer = persistReducer(persitConfig, reducer);
+const persistedReducer = persistReducer(persistConfig, reducer);
 
 export const store = configureStore({
   reducer: persistedReducer,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+      },
+    }),
 });
 
-const persistor = persistStore(store);
-export { persistor };
-
+export const persistor = persistStore(store);

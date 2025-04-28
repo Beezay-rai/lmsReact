@@ -11,7 +11,7 @@ import { Box, Button, Checkbox, Grid, Modal, Toolbar, Typography } from '@mui/ma
 import { FaTrash } from 'react-icons/fa'
 import { BsPencilSquare } from 'react-icons/bs'
 import { Link } from 'react-router-dom';
-import { deleteTransactionService, transactionService, returnTransactionService } from '../../../Services/apiServices/transaction/transactionServices';
+import { deleteTransactionService, transactionService, returnTransactionService } from '../../../services/apiServices/transaction/transactionServices';
 import { toast } from 'react-toastify';
 export default function Transaction() {
     const [page, setPage] = useState(0);

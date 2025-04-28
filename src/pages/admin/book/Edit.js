@@ -21,10 +21,10 @@ import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { useState, useEffect } from "react";
 import {
-  editBookService,
-  bookByIdService,
-} from "../../../Services/apiServices/book/bookServices";
-import { categoryService } from "../../../Services/apiServices/category/categoryServices";
+  updateBook,
+  getBookById,
+} from "../../../services/apiServices/book/bookServices";
+import { categoryService } from "../../../services/apiServices/category/categoryServices";
 
 export default function EditBook() {
   const {
@@ -40,7 +40,7 @@ export default function EditBook() {
   const { id } = useParams();
   useEffect(() => {
     let fetchData = async () => {
-      await bookByIdService(id).then((response) => {
+      await getBookById(id).then((response) => {
         setApiData(response.data);
       });
     };
@@ -92,7 +92,7 @@ export default function EditBook() {
     try {
 
       if (isSubmitting) return;
-      const response = await editBookService(data);
+      const response = await updateBook(data);
       if (response.status === true) {
         toast.success(response.message, {
           autoclose: 1000,

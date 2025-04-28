@@ -6,11 +6,11 @@ import { SInputField } from '../../../components/styles/Styles';
 import { IoIosArrowRoundBack } from 'react-icons/io'
 import { Link, useNavigate } from 'react-router-dom';
 import { Controller, useForm } from 'react-hook-form';
-import { createStudentService } from '../../../Services/apiServices/student/studentService';
+import { createStudentService } from '../../../services/apiServices/student/studentService';
 import { toast } from 'react-toastify';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { useEffect, useState } from 'react';
-import { courseService } from '../../../Services/apiServices/course/courseServices';
+import { courseService } from '../../../services/apiServices/course/courseServices';
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup';
 import { SFormCover } from '../style/style';

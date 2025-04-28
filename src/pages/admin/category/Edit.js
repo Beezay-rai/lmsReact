@@ -16,7 +16,7 @@ import { useForm } from "react-hook-form";
 import {
   editCategoryService,
   categoryByIdService,
-} from "../../../Services/apiServices/category/categoryServices";
+} from "../../../services/apiServices/category/categoryServices";
 import { toast } from "react-toastify";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -55,7 +55,6 @@ export default function EditCategory() {
   }, [id, setValue]);
 
   const onSubmit = async (data) => {
-    debugger
     if (isSubmitting) return;
 
     try {

@@ -14,7 +14,7 @@ const GOOGLE_CLIENT_ID =
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
-  <React.StrictMode>
+
     <Provider store={store}>
       <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
         <Router>
@@ -26,5 +26,5 @@ root.render(
         </Router>
       </GoogleOAuthProvider>
     </Provider>
-  </React.StrictMode>
+
 );
