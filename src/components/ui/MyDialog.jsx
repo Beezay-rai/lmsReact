@@ -8,19 +8,17 @@ import {
 } from "@mui/material";
 import { closeDialog, setDialogState } from "../../redux/appSlices";
 import { useDispatch, useSelector } from "react-redux";
-import { useMyFunctionContext } from "../context/MyFunctionContext";
 
 export const MyDialog = ({ open, title = "Confirm Delete", message = "Are you sure you want to delete?", confirmText = "Delete", color = "error" }) => {
   const dispatch = useDispatch();
-  const { myStoredFunction, storedParams } = useMyFunctionContext();
   const { isLoading ,dialogState} = useSelector((state) => state.appFeature);
   const hideDialog = () => {
     dispatch(closeDialog());
   };
 
   const handleConfirm = async () => { 
-    if (myStoredFunction) {
-      await myStoredFunction(...storedParams);
+    if (dialogState.onConfirm) {
+      await dialogState.onConfirm(...(dialogState.params || []));
     }
     hideDialog(); 
   };

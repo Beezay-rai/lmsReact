@@ -5,6 +5,5 @@ export const loginUserService = async (data) => {
         return await authApi(data);
     } catch (error) {
         console.error("Login error:", error);
-        throw error; 
     }
 };

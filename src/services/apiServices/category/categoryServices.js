@@ -10,7 +10,7 @@ export const categoryService = async () => {
 
 export const createCategoryService = async (data) => {
     let response = await categoryApi(
-        "",
+        "POST",
         "",
         data
     );

@@ -17,6 +17,7 @@ export default function CreateCategory() {
       if (isSubmitting) return;
 
       const response = await createCategoryService(data);
+      debugger;
       if (response.status) {
         toast.success(response.message, { autoclose: 3000 });
         navigate("/Admin/Category");

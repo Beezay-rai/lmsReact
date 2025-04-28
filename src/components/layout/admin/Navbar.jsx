@@ -7,48 +7,43 @@ import ava from "../../../assests/img/ava.jpg";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import { Link } from "react-router-dom";
 
-function NavBar(){
-  const navBarHeight = "60px";
+function NavBar() {
   const [drawerOpen, setDrawerOpen] = useState(false);
-    const [mobileOpen, setMobileOpen] = useState(false);
-    const [isClosing, setIsClosing] = useState(false);
-    const handleDrawerToggle = () => {
-        if (!isClosing) {
-          setMobileOpen(!mobileOpen);
-        }
-      };
-    return (
-      <Box
-        className="navbar  flex justify-between px-5 w-full h-[400]"
-        sx={{
-          height: navBarHeight,
-          backgroundColor: "#1976d2",
-          color: "white",
-        }}
-      >
-        <Box className="flex items-center">
-          <button
-            className="sm:block md:hidden lg:hidden text-white"
-            onClick={handleDrawerToggle}
-          >
-            {drawerOpen ? <ArrowBackIcon /> : <MenuIcon />}
-          </button>
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [isClosing, setIsClosing] = useState(false);
+  const handleDrawerToggle = () => {
+    if (!isClosing) {
+      setMobileOpen(!mobileOpen);
+    }
+  };
+  return (
+    <div
+      className="navbar max-w-full flex justify-between px-5  h-16 "
+      style={{
+        backgroundColor: "#1976d2",
+        color: "white",
+      }}
+    >
+      <div className="flex items-center">
+        <button
+          className="sm:block md:hidden lg:hidden text-white"
+          onClick={handleDrawerToggle}
+        >
+          {drawerOpen ? <ArrowBackIcon /> : <MenuIcon />}
+        </button>
 
-          <Link to={"/"}>
-            <Typography variant="h6">LMS</Typography>
-          </Link>
-        </Box>
+      </div>
 
-        <Box className="flex items-center gap-3">
-          <IconButton color="inherit">
-            <Badge badgeContent={4} color="error">
-              <NotificationsIcon color="inherit" />
-            </Badge>
-          </IconButton>
+      <div className="flex items-center gap-3">
+        <IconButton color="inherit">
+          <Badge badgeContent={4} color="error">
+            <NotificationsIcon color="inherit" />
+          </Badge>
+        </IconButton>
 
-          <Avatar src={ava}></Avatar>
-        </Box>
-      </Box>
-    );
+        <Avatar src={ava}></Avatar>
+      </div>
+    </div>
+  );
 }
 export default NavBar;

@@ -1,7 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const userState = {
-  user: "",
+  user: {
+    access_token: "",
+    refresh_token: "",  
+  },
 };
 
 export const userSlice = createSlice({
@@ -14,6 +17,10 @@ export const userSlice = createSlice({
     logout: (state) => {
       state.user = "";
     },
+    updateToken: (state, action) => {
+      state.user.access_token = action.payload.access_token;
+      state.user.refresh_token = action.payload.refresh_token;
+    },
   },
 });
 
@@ -24,7 +31,9 @@ const appState = {
     title: "Confirm Delete",
     message: "Are you sure you want to delete?",
     confirmText: "Delete",
-    color: "error"
+    color: "error",
+    onConfirm: null,
+    params: []
   },
 };
 export const appSlice = createSlice({
@@ -50,6 +59,6 @@ export const { setIsLoading, setDialogState,closeDialog,openDialog } = appSlice.
 
 export const { logout } = userSlice.actions;
 
-export const { setUserDetail } = userSlice.actions;
+export const { setUserDetail,updateToken } = userSlice.actions;
 
 export default userSlice.reducer;

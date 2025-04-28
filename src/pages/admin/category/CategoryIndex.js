@@ -19,7 +19,6 @@ import { toast } from "react-toastify";
 import { InfinitySpin } from "react-loader-spinner";
 import { useDispatch } from "react-redux";
 import { setDialogState, setIsLoading } from "../../../redux/appSlices";
-import { useMyFunctionContext } from "../../../components/context/MyFunctionContext";
 
 export default function CategoryIndex() {
   const [page, setPage] = useState(0);
@@ -28,8 +27,6 @@ export default function CategoryIndex() {
   const [categoryList, setCategoryList] = useState([]);
 
   const dispatch = useDispatch();
-  const { setMyStoredFunction, setStoredParams } = useMyFunctionContext();
-
   useEffect(() => {
     fetchCategories();
   }, []);
@@ -37,15 +34,20 @@ export default function CategoryIndex() {
   const fetchCategories = async () => {
     setLoading(true);
     try {
-      const { status, data } = await categoryService();
-      if (status) setCategoryList(data);
-    } catch {
+      const response = await categoryService();
+      if (response?.status) {
+        setCategoryList(response.data);
+      } else {
+        toast.error("Failed to fetch categories.");
+      }
+    } catch (error) {
+      console.error("Error fetching categories:", error);
       toast.error("Failed to fetch categories.");
     } finally {
       setLoading(false);
     }
   };
-
+  
   const handleDelete = async (id) => {
     dispatch(setIsLoading(true));
     try {
@@ -64,9 +66,7 @@ export default function CategoryIndex() {
   };
 
   const openDeleteDialog = (id) => {
-    setMyStoredFunction(() => handleDelete);
-    setStoredParams([id]);
-    dispatch(setDialogState({ open: true }));
+    dispatch(setDialogState({ open: true ,onConfirm: handleDelete, params: [id], message: "Are you sure you want to delete this category?" }));
   };
 
   return (
@@ -84,15 +84,17 @@ export default function CategoryIndex() {
               <TableRow>
                 <TableCell className="border-r-2 border-gray-200">S.N</TableCell>
                 <TableCell>Name</TableCell>
-                <TableCell>ID</TableCell>
+                <TableCell>Id</TableCell>
                 <TableCell>Action</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {loading ? (
                 <TableRow>
-                  <TableCell colSpan={4} align="center">
-                    <InfinitySpin visible width="100" color="#1976d2" ariaLabel="loading" />
+                  <TableCell colSpan={4} >
+                    <span className="m-auto flex justify-evenly" >
+                    <InfinitySpin  visible width="100" color="#1976d2" ariaLabel="loading" />
+                    </span>
                   </TableCell>
                 </TableRow>
               ) : categoryList.length === 0 ? (

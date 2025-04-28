@@ -23,12 +23,14 @@ import Home from "./pages/admin/home/Home";
 import Error from "./pages/shared/error";
 import BookIndex from "./pages/admin/book/BookIndex";
 
+
 export default function Gateway() {
   return (
     <Routes>
       <Route exact path="/*" element={<Error />} />
       <Route path="/Login" element={<Login />} />
       <Route path="/SignUp" element={<SignUp />} />
+
       <Route element={<PrivateRoute />}>
         <Route path="/" element={<Home />} />
         {/* SetUser */}

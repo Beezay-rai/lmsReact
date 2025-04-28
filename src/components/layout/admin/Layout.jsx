@@ -1,6 +1,5 @@
-
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   Box,
   Drawer,
@@ -23,7 +22,7 @@ import { PiStudentFill } from "react-icons/pi";
 import NavBar from "./Navbar";
 import Logo from "../../../assests/img/logo.png";
 import { useDispatch } from "react-redux";
-import { setDialogState } from "../../../redux/appSlices";
+import { logout, setDialogState } from "../../../redux/appSlices";
 
 const setUpArray = [
   { label: "Course", icon: <AiOutlineUserAdd />, to: "/Admin/Course" },
@@ -67,37 +66,37 @@ const ExpandableMenu = ({ title, icon, items }) => {
   );
 };
 
-
-
-
 export default function AdminLayout({ children }) {
   const dispatch = useDispatch();
 
-  const openLogOutDialog=()=>{
-    dispatch(setDialogState({
-      open:true,
-      title:"Log Out",
-      color:"info",
-      confirmText:"Log Out",
-      message:"Are you sure you want to log out?"
-    }))
-  }
+  const navigate = useNavigate();
+
+  const handleLogOut = () => {
+    dispatch(logout());
+    navigate("/Login");
+  };
+
+  const openLogOutDialog = () => {
+    dispatch(
+      setDialogState({
+        open: true,
+        title: "Log Out",
+        color: "info",
+        confirmText: "Log Out",
+        message: "Are you sure you want to log out?",
+        onConfirm: handleLogOut
+      })
+    );
+    //  setMyStoredFunction(handleLogOut);
+  };
 
   return (
-    <div style={{paddingLeft:"300px"}}>
+    <div className="content ">
       <NavBar />
-      <Drawer
-        variant="permanent"
-        sx={{
-          width: "300px",
-          "& .MuiDrawer-paper": { width: "300px" },
-        }}
-        anchor="left"
-      >
+      <div className="sidebar m absolute top-0 w-80 border-r-2 h-full">
         <div className="h-44 bg-white flex justify-center items-center relative">
           <img className="h-full" src={Logo}></img>
         </div>
-
         <List>
           <MenuItem label="Home" icon={<FaHome />} to="/" />
           <ExpandableMenu
@@ -124,20 +123,15 @@ export default function AdminLayout({ children }) {
             </ListItemIcon>
             <ListItemText primary="Setting" />
           </ListItemButton>
-          <ListItemButton onClick={openLogOutDialog} >
+          <ListItemButton onClick={openLogOutDialog}>
             <ListItemIcon>
               <FiLogOut />
             </ListItemIcon>
             <ListItemText primary="Log out" />
           </ListItemButton>
         </List>
-      </Drawer>
-      <Box
-        component="main"
-        className="p-5"
-      >
-        {children}
-      </Box>
+      </div>
+      <div className="main ml-80 p-5">{children}</div>
     </div>
   );
 }

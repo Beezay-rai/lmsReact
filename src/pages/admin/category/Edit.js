@@ -55,7 +55,6 @@ export default function EditCategory() {
   }, [id, setValue]);
 
   const onSubmit = async (data) => {
-    debugger
     if (isSubmitting) return;
 
     try {

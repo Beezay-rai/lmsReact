@@ -122,7 +122,7 @@ export default function BookIndex() {
                   <TableCell className="border-r-2 border-gray-200 w-2">
                     {index + 1}
                   </TableCell>
-                  <TableCell>{item.name}</TableCell>
+                  <TableCell>{item.book_name}</TableCell>
                   <TableCell>{item.id}</TableCell>
                   <TableCell>
                     <Link to={`/Admin/Book/Edit/${item.id}`}>
