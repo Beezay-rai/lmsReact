@@ -1,6 +1,7 @@
-import React from 'react';
-import { Box, Button, Container, Typography } from '@mui/material';
-import Grid from '@mui/material/Grid';
+import React from "react";
+import { Box, Button, Container, Typography } from "@mui/material";
+import Grid from "@mui/material/Grid";
+import { Link } from "react-router-dom";
 
 export default function NotFound() {
   return (
@@ -19,7 +20,9 @@ export default function NotFound() {
             <Typography variant="h6">
               The page you’re looking for doesn’t exist.
             </Typography>
-            <Button variant="contained">Back Home</Button>
+            <Link to={"/"} style={{ textDecoration: "none" }}>
+              <Button variant="contained">Back Home</Button>
+            </Link>
           </Grid>
           <Grid xs={6}>
             <img

@@ -1,9 +1,6 @@
 import axios from "axios";
 import { store } from "../redux/store";
-import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { jwtDecode } from "jwt-decode";
-import { logout } from "../redux/appSlices";
+import { logout, setIsLoading, updateToken } from "../redux/appSlices";
 import { checkTokenValidity } from "../util/Utility";
 
 // const baseUrl = "http://my-lms.runasp.net/api";
@@ -17,8 +14,8 @@ export const urls = {
   refreshTokenUrl: `${baseUrl}/v1/auth/refresh`,
   signUpUserUrl: `${baseUrl}/v1/users`,
   courseUrl: `${baseUrl}/v1/courses`,
-  studentUrl: `${baseUrl}/v1/student`,
-  categoryUrl: `${baseUrl}/v1/categories`,
+  studentUrl: `${baseUrl}/v1/students`,
+  bookCategoryUrl: `${baseUrl}/v1/book-categories`,
   bookUrl: `${baseUrl}/v1/books`,
   transactionUrl: `${baseUrl}/v1/transaction`,
   dashboardUrl: `${baseUrl}/dashboard`,
@@ -26,28 +23,45 @@ export const urls = {
 
 const myAxios = axios.create();
 
-myAxios.interceptors.response.use(
-  (config) => {
-    const token = store.getState().userDetail.user?.access_token;
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+const setUpToken = async () => {
+  const userData = store.getState().userDetail;
+  const access_token = userData?.user?.access_token;
+  const refresh_token = userData?.user?.refresh_token;
+  const dispatch = store.dispatch;
+  const isAccessTokenValid = checkTokenValidity(access_token);
+  const isRefreshTokenValid = checkTokenValidity(refresh_token);
+  if (!isAccessTokenValid && isRefreshTokenValid) {
+    const response = await refreshTokenApi(refresh_token);
+    if (response.access_token) {
+      dispatch(updateToken(response));
+    } else {
+      dispatch(logout());
+      window.location.href = "/login";
     }
-    return config;
-  },
-  async (error) => {
-    console.log("Error in interceptor", error);
-    return Promise.reject(error);
+  } else if (!isAccessTokenValid && !isRefreshTokenValid) {
+    dispatch(logout());
+    window.location.href = "/login";
   }
-);
+};
 
 const apiRequest = async (method, url, data, requiresAuth = false) => {
+  const dispatch = store.dispatch;
+  if (
+    method?.toUpperCase() === "POST" ||
+    method?.toUpperCase() === "PUT" ||
+    method?.toUpperCase() === "DELETE"
+  ) {
+    dispatch(setIsLoading(true));
+  }
+
   const config = {
     method,
     url,
     data,
   };
   if (requiresAuth) {
-    const token = store.getState().userDetail.user?.access_token;
+    await setUpToken();
+    let token = store.getState().userDetail.user?.access_token;
     config.headers = {
       Authorization: `Bearer ${token}`,
     };
@@ -57,7 +71,9 @@ const apiRequest = async (method, url, data, requiresAuth = false) => {
     let response = await myAxios(config);
     return response.data;
   } catch (e) {
-    return null;
+    return { status: false };
+  } finally {
+    dispatch(setIsLoading(false));
   }
 };
 
@@ -78,7 +94,18 @@ export const studentApi = (method, url, data) =>
   apiRequest(method, `${urls.studentUrl}${url}`, data, true);
 export const dashboardApi = (method, url, data) =>
   apiRequest(method, `${urls.dashboardUrl}${url}`, data, true);
-export const categoryApi = (method, url, data) =>
-  apiRequest(method, `${urls.categoryUrl}${url}`, data, true);
-export const refreshTokenApi = (refresh_token) =>
-  apiRequest("POST", `${urls.refreshTokenUrl}/${refresh_token}`, null, false);
+export const bookCategoryApi = (method, url = "", data) =>
+  apiRequest(method, `${urls.bookCategoryUrl}${url}`, data, true);
+export const refreshTokenApi = async (refresh_token) => {
+  try {
+    const config = {
+      method: "POST",
+      url: `${urls.refreshTokenUrl}/${refresh_token}`,
+    };
+    var response = await myAxios(config);
+    return response.data;
+  } catch (e) {
+    console.log("Error in refresh token api", e);
+    return null;
+  }
+};

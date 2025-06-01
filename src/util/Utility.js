@@ -36,7 +36,7 @@ export const PrivateRoute = () => {
     const validateTokens = async () => {
       if (!isAccessTokenValid && isRefreshTokenValid) {
         const response = await refreshTokenService(refresh_token);
-        if (response.access_token) {
+        if (response && response.access_token) {
           dispatch(updateToken(response));
         } else {
           dispatch(logout());

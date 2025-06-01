@@ -11,23 +11,28 @@ import EditCourse from "./pages/admin/course/Edit";
 import StudentIndex from "./pages/admin/student/StudentIndex";
 import CreateStudent from "./pages/admin/student/Create";
 import EditStudent from "./pages/admin/student/Edit";
-import CategoryIndex from "./pages/admin/category/CategoryIndex";
-import CreateCategory from "./pages/admin/category/Create";
-import EditCategory from "./pages/admin/category/Edit";
+import CreateBookCategory from "./pages/admin/book-category/Create";
 import CreateBook from "./pages/admin/book/Create";
-import EditBook from "./pages/admin/book/Edit"
-import CreateTransaction from "./pages/admin/transaction/Create";
-import Transaction from "./pages/admin/transaction/TransactionIndex";
-import EditTransaction from "./pages/admin/transaction/Edit";
+import EditBook from "./pages/admin/book/Edit";
 import Home from "./pages/admin/home/Home";
-import Error from "./pages/shared/error";
+import Error from "./pages/shared/Error";
 import BookIndex from "./pages/admin/book/BookIndex";
-
+import NotFound from "./pages/shared/NotFound";
+import RentBookIndex from "./pages/admin/rent-book/RentBookIndex";
+import CreateRentBook from "./pages/admin/rent-book/Create";
+import EditRentBook from "./pages/admin/rent-book/Edit";
+import { store } from "./redux/store";
+import MySpinner from "./components/ui/MySpinner";
+import { useSelector } from "react-redux";
+import BookCategoryIndex from "./pages/admin/book-category/BookCategoryIndex";
+import EditBookCategory from "./pages/admin/book-category/Edit";
 
 export default function Gateway() {
+
   return (
     <Routes>
-      <Route exact path="/*" element={<Error />} />
+      <Route exact path="/error" element={<Error />} />
+      <Route exact path="/*" element={<NotFound />} />
       <Route path="/Login" element={<Login />} />
       <Route path="/SignUp" element={<SignUp />} />
 
@@ -48,16 +53,16 @@ export default function Gateway() {
         <Route exact path="/Admin/Student/Edit/:id" element={<EditStudent />} />
 
         {/* Category */}
-        <Route exact path="/Admin/Category" element={<CategoryIndex />} />
+        <Route exact path="/Admin/Book-Category" element={<BookCategoryIndex />} />
         <Route
           exact
-          path="/Admin/Category/Create"
-          element={<CreateCategory />}
+          path="/Admin/Book-Category/Create"
+          element={<CreateBookCategory />}
         />
         <Route
           exact
-          path="/Admin/Category/Edit/:id"
-          element={<EditCategory />}
+          path="/Admin/Book-Category/Edit/:id"
+          element={<EditBookCategory />}
         />
 
         {/* Book */}
@@ -66,19 +71,18 @@ export default function Gateway() {
         <Route exact path="/Admin/Book/Edit/:id" element={<EditBook />} />
 
         {/* Transaction */}
-        <Route exact path="/Admin/Transaction" element={<Transaction />} />
+        <Route exact path="/Admin/Rent-Book" element={<RentBookIndex />} />
         <Route
           exact
-          path="/Admin/Transaction/Create"
-          element={<CreateTransaction />}
+          path="/Admin/Rent-book/Create"
+          element={<CreateRentBook />}
         />
         <Route
           exact
-          path="/Admin/Transaction/Edit/:id"
-          element={<EditTransaction />}
+          path="/Admin/Rent-Book/Edit/:id"
+          element={<EditRentBook />}
         />
       </Route>
     </Routes>
-
   );
 }

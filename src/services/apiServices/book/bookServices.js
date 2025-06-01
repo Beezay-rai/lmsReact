@@ -33,7 +33,7 @@ export const deleteBook = async (id) => {
 
     let response = await bookApi(
         "DELETE",
-        +"/" + id,
+        "/" + id,
     );
     return response
 

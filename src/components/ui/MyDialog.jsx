@@ -6,40 +6,33 @@ import {
   DialogContentText,
   DialogTitle,
 } from "@mui/material";
-import { closeDialog, setDialogState } from "../../redux/appSlices";
+import { closeDialog, setDialogState } from "../../redux/appSlices.js";
 import { useDispatch, useSelector } from "react-redux";
+import { useMyDialog } from "../context/MyDialogContext.tsx";
 
-export const MyDialog = ({ open, title = "Confirm Delete", message = "Are you sure you want to delete?", confirmText = "Delete", color = "error" }) => {
-  const dispatch = useDispatch();
-  const { isLoading ,dialogState} = useSelector((state) => state.appFeature);
-  const hideDialog = () => {
-    dispatch(closeDialog());
-  };
+export const MyDialog = () => {
+  const { isOpen, config, runConfirm, close } = useMyDialog();
+  const { isLoading } = useSelector((state) => state.appFeature);
 
-  const handleConfirm = async () => { 
-    if (dialogState.onConfirm) {
-      await dialogState.onConfirm(...(dialogState.params || []));
-    }
-    hideDialog(); 
-  };
   return (
-    <Dialog open={open} onClose={hideDialog}>
-      <DialogTitle>{title}</DialogTitle>
+    <Dialog open={isOpen} onClose={close}>
+      <DialogTitle>{config.title ?? "Confirm Action"}</DialogTitle>
       <DialogContent>
-        <DialogContentText>{message}</DialogContentText>
+        <DialogContentText>
+          {config.message ?? "Are you sure you want to proceed?"}
+        </DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={hideDialog}>Cancel</Button>
+        <Button onClick={close}>Cancel</Button>
         <Button
-          onClick={handleConfirm}
+          onClick={runConfirm}
           variant="contained"
-          color={color}
-          autoFocus
+          color={config.color ?? "primary"}
           disabled={isLoading}
         >
-          {isLoading ? "Deleting..." : confirmText}
+          {isLoading ? "Processing..." : config.confirmText ?? "Confirm"}
         </Button>
       </DialogActions>
     </Dialog>
   );
-};
+}

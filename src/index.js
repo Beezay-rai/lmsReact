@@ -7,6 +7,8 @@ import { persistor, store } from "./redux/store";
 import { PersistGate } from "redux-persist/integration/react";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { ErrorBoundary } from "react-error-boundary";
+import Error from "./pages/shared/Error";
+import { MyDialogProvider } from "./components/context/MyDialogContext.tsx";
 
 const GOOGLE_CLIENT_ID =
   "826437202548-fj078fp80th3bchs3jtn3nve1q2pcu7d.apps.googleusercontent.com";
@@ -19,8 +21,11 @@ root.render(
       <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
         <Router>
           <PersistGate loading={null} persistor={persistor}>
-            <ErrorBoundary fallback={<div>Something went wrong</div>}>
+            <ErrorBoundary fallback={<Error/>}>
+            <MyDialogProvider>
+
               <App />
+            </MyDialogProvider>
             </ErrorBoundary>
           </PersistGate>
         </Router>

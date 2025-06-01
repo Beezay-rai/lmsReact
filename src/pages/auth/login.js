@@ -59,6 +59,7 @@ export default function Login() {
 
   const onSubmit = async (data) => {
     if (isSubmitting) return;
+    debugger
     dispatch(setIsLoading(true));
     try {
       const loginResponse = await loginUserService(data);
@@ -102,11 +103,11 @@ export default function Login() {
               <div className="m-3 w-2/4">
                 <FormControl fullWidth>
                   <TextField
-                    label="Username"
-                    id="username"
+                    label="email"
+                    id="email"
                     size="small"
                     inputProps={{ style: { fontSize: "15px" } }}
-                    {...register("username")}
+                    {...register("email")}
                   />
                 </FormControl>
               </div>

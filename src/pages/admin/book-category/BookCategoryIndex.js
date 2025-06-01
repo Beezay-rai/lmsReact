@@ -11,24 +11,23 @@ import {
   Card,
   CardContent,
   Paper,
+  IconButton,
+  Tooltip,
+  Box,
   TextField,
   InputAdornment,
   Avatar,
   Chip,
-  Box,
 } from "@mui/material";
-import { FaTrash } from "react-icons/fa";
+import { FaTrash, FaEdit, FaPlus, FaSearch, FaBook } from "react-icons/fa";
 import { BsPencilSquare } from "react-icons/bs";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
+import { toast } from "react-toastify";
+import { deleteBookCategoryService, getAllBookCategoryService } from "../../../services/apiServices/book-category/bookCategoryServices";
 import { setDialogState, setIsLoading } from "../../../redux/appSlices";
 import MySpinner from "../../../components/ui/MySpinner";
-import {
-  deleteBook,
-  getAllBooks,
-} from "../../../services/apiServices/book/bookServices";
 import { IoMdBook } from "react-icons/io";
 import { useMyDialog } from "../../../components/context/MyDialogContext.tsx";
 
@@ -40,69 +39,68 @@ const tableRowAnimation = {
   },
 };
 
-export default function BookIndex() {
+export default function BookCategoryIndex() {
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
-  const [apiData, setApiData] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [categoryList, setCategoryList] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const { open } = useMyDialog();
-
+const { open } = useMyDialog();
   const dispatch = useDispatch();
 
   useEffect(() => {
-    fetchBooks();
+    fetchCategories();
   }, []);
 
-  const fetchBooks = async () => {
+  const fetchCategories = async () => {
     setLoading(true);
     try {
-      const response = await getAllBooks();
+      const response = await getAllBookCategoryService();
       if (response?.status) {
-        setApiData(response.data);
+        setCategoryList(response.data);
       } else {
-        toast.error("Failed to fetch books.");
+        toast.error("Failed to fetch categories.");
       }
     } catch (error) {
-      toast.error("Failed to fetch books.");
+      console.error("Error fetching categories:", error);
+      toast.error("Failed to fetch categories.");
     } finally {
       setLoading(false);
     }
   };
 
   const handleDelete = async (id) => {
-    debugger;
     dispatch(setIsLoading(true));
     try {
-      const response = await deleteBook(id);
+      const response = await deleteBookCategoryService(id);
       if (response.status) {
-        toast.success("Deleted Successfully", { autoClose: 2000 });
-        fetchBooks();
+        toast.success("Category deleted successfully", { autoClose: 2000 });
+        fetchCategories();
       } else {
-        toast.error("Error Occurred!");
+        toast.error("Error occurred while deleting!");
       }
     } catch {
-      toast.error("Failed to delete book.");
+      toast.error("Failed to delete category.");
     } finally {
       dispatch(setIsLoading(false));
     }
   };
-
   const openDeleteDialog = (id) => {
-    open({
+   open({
       title: "Delete Item",
       message: "Are you sure you want to delete this item?",
       confirmText: "Delete",
       color: "error",
       onConfirm: handleDelete,
-      params: [id],
+      params:[id]
     });
   };
 
-  const filteredBooks = apiData.filter(
-    (book) =>
-      book.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      book.id.toString().includes(searchTerm)
+
+  const filteredCategories = categoryList.filter(
+    (category) =>
+      category.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      category.id.toString().includes(searchTerm)
   );
 
   return (
@@ -119,10 +117,10 @@ export default function BookIndex() {
             }}
           >
             <IoMdBook size={50} />
-            Books
+            Book Categories
           </Typography>
 
-          <Link to="/Admin/Book/Create" style={{ textDecoration: "none" }}>
+          <Link to="/Admin/Book-Category/Create" style={{ textDecoration: "none" }}>
             <Button
               variant="contained"
               color="primary"
@@ -132,7 +130,7 @@ export default function BookIndex() {
                 fontWeight: 600,
               }}
             >
-              Add Book
+              Add Category
             </Button>
           </Link>
         </div>
@@ -141,17 +139,17 @@ export default function BookIndex() {
           <TextField
             size="small"
             variant="outlined"
-            placeholder="Search books..."
+            placeholder="Search categories..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
-                  <IoMdBook />
+                  <FaSearch />
                 </InputAdornment>
               ),
               sx: {
-                backgroundColor: "background.paper",
+                backgroundColor: "background.paper"
               },
             }}
           />
@@ -169,24 +167,16 @@ export default function BookIndex() {
           <Table>
             <TableHead sx={{ bgcolor: "primary.main" }}>
               <TableRow>
-                <TableCell
-                  sx={{ color: "white", fontWeight: 600, width: "10%" }}
-                >
+                <TableCell sx={{ color: "white", fontWeight: 600, width: "10%" }}>
                   #
                 </TableCell>
-                <TableCell
-                  sx={{ color: "white", fontWeight: 600, width: "50%" }}
-                >
-                  Book Name
+                <TableCell sx={{ color: "white", fontWeight: 600, width: "50%" }}>
+                  Category
                 </TableCell>
-                <TableCell
-                  sx={{ color: "white", fontWeight: 600, width: "20%" }}
-                >
-                  Book ID
+                <TableCell sx={{ color: "white", fontWeight: 600, width: "20%" }}>
+                  Category ID
                 </TableCell>
-                <TableCell
-                  sx={{ color: "white", fontWeight: 600, width: "20%" }}
-                >
+                <TableCell sx={{ color: "white", fontWeight: 600, width: "20%" }}>
                   Actions
                 </TableCell>
               </TableRow>
@@ -198,18 +188,18 @@ export default function BookIndex() {
                     <MySpinner />
                   </TableCell>
                 </TableRow>
-              ) : filteredBooks.length === 0 ? (
+              ) : filteredCategories.length === 0 ? (
                 <TableRow>
                   <TableCell colSpan={4} align="center" sx={{ py: 5 }}>
                     <Typography variant="body1" color="textSecondary">
                       {searchTerm
-                        ? "No matching books found"
-                        : "No books available"}
+                        ? "No matching categories found"
+                        : "No categories available"}
                     </Typography>
                   </TableCell>
                 </TableRow>
               ) : (
-                filteredBooks
+                filteredCategories
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((item, index) => (
                     <TableRow
@@ -225,9 +215,7 @@ export default function BookIndex() {
                     >
                       <TableCell>{index + 1 + page * rowsPerPage}</TableCell>
                       <TableCell>
-                        <Box
-                          sx={{ display: "flex", alignItems: "center", gap: 2 }}
-                        >
+                        <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
                           <Avatar sx={{ bgcolor: "primary.main" }}>
                             {item.name.charAt(0)}
                           </Avatar>
@@ -243,7 +231,7 @@ export default function BookIndex() {
                         />
                       </TableCell>
                       <TableCell>
-                        <Link to={`/Admin/Book/Edit/${item.id}`}>
+                        <Link to={`/Admin/Book-Category/Edit/${item.id}`}>
                           <Button sx={{ margin: "4px" }} variant="contained">
                             <BsPencilSquare title="Edit" />
                           </Button>
@@ -264,7 +252,7 @@ export default function BookIndex() {
           <TablePagination
             rowsPerPageOptions={[10, 25, 50]}
             component="div"
-            count={filteredBooks.length}
+            count={filteredCategories.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={(_, newPage) => setPage(newPage)}

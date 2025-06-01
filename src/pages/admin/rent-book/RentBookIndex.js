@@ -13,7 +13,7 @@ import { BsPencilSquare } from 'react-icons/bs'
 import { Link } from 'react-router-dom';
 import { deleteTransactionService, transactionService, returnTransactionService } from '../../../services/apiServices/transaction/transactionServices';
 import { toast } from 'react-toastify';
-export default function Transaction() {
+export default function RentBookIndex() {
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
     const [apiData, setApiData] = useState([]);

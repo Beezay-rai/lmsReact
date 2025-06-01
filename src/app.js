@@ -4,8 +4,9 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Gateway from "./gateway.js";
 import "./styles/global.css";
-import { MyDialog } from "./components/ui/MyDialog.jsx";
 import { useSelector } from "react-redux";
+import { Fade } from "@mui/material";
+import { MyDialog } from "./components/ui/MyDialog";
 
 function App() {
   const dialogState = useSelector((state) => state.appFeature.dialogState);
@@ -14,13 +15,7 @@ function App() {
     <>
       <ToastContainer />
       <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <MyDialog
-          open={dialogState.open}
-          message={dialogState.message}
-          confirmText={dialogState.confirmText}
-          title={dialogState.title}
-          color={dialogState.color}
-        />
+        <MyDialog />
         <Gateway />
       </LocalizationProvider>
     </>

@@ -1,342 +1,346 @@
 import * as React from "react";
-import CssBaseline from "@mui/material/CssBaseline";
-import Box from "@mui/material/Box";
-import Container from "@mui/material/Container";
+import { useState, useEffect } from "react";
+import { useNavigate, Link, useParams } from "react-router-dom";
+import { useForm, Controller } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+import { toast } from "react-toastify";
+import { motion } from "framer-motion";
 import {
+  Box,
   Button,
+  Card,
+  CardContent,
   FormControl,
-  FormGroup,
-  FormHelperText,
   InputLabel,
   MenuItem,
   Select,
-  Stack,
   TextField,
-  Toolbar,
   Typography,
+  FormHelperText,
+  InputAdornment,
+  Stack,
+  Avatar,
+  Container,
+  CssBaseline,
+  Divider,
 } from "@mui/material";
-import { SInputField } from "../../../components/styles/Styles";
-import { IoIosArrowRoundBack } from "react-icons/io";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import { Controller, useForm } from "react-hook-form";
-import { toast } from "react-toastify";
-import { useState, useEffect } from "react";
+import {
+  IoIosArrowRoundBack,
+  IoMdPerson,
+  IoMdCalendar,
+  IoMdSchool,
+  IoMdTransgender,
+  IoMdMail,
+  IoMdCall,
+} from "react-icons/io";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import {
   editStudentService,
   studentByIdService,
 } from "../../../services/apiServices/student/studentService";
-import dayjs from "dayjs";
-import { DatePicker } from "@mui/x-date-pickers";
 import { courseService } from "../../../services/apiServices/course/courseServices";
-import * as yup from 'yup'
-import { yupResolver } from '@hookform/resolvers/yup';
-
-
+import { FaUserGraduate } from "react-icons/fa";
+import dayjs from "dayjs";
+import MySpinner from "../../../components/ui/MySpinner";
+import { useDispatch } from "react-redux";
+import { setIsLoading } from "../../../redux/appSlices";
 
 const schema = yup.object().shape({
-  firstName: yup.string().required("Name is required !"),
-  courseId: yup.number().min(1, "Please select course !").required("This Field is required !").typeError("Please select course !"),
-  emailAddress: yup.string().email("Invalid").required("Email is required !"),
-  phoneNumber: yup.string().min(10,"Minimum 10 digit").max(15,"Maximum 15 digit").required(),
-  birthDate:yup.date().required("Please select birth date !"),
-  genderId: yup.number().min(1, "Please select gender !").required("This Field is required !").typeError("Please select gender !"),
-
-})
+  first_name: yup.string().required("First name is required!"),
+  last_name: yup.string().required("Last name is required!"),
+  course_id: yup
+    .number()
+    .min(1, "Please select course!")
+    .required("This field is required!")
+    .typeError("Please select course!"),
+  email_address: yup
+    .string()
+    .email("Invalid email")
+    .required("Email is required!"),
+  phone_number: yup
+    .string()
+    .min(10, "Minimum 10 digits")
+    .max(15, "Maximum 15 digits")
+    .required("Phone number is required"),
+  dob: yup.date().required("Please select date of birth!"),
+  gender_id: yup
+    .number()
+    .min(1, "Please select gender!")
+    .required("This field is required!")
+    .typeError("Please select gender!"),
+});
 
 export default function EditStudent() {
+  const [studentData, setStudentData] = useState(null);
+  const [courseList, setCourseList] = useState([]);
+  const dispatch = useDispatch();
+
+  const navigate = useNavigate();
+  const { id } = useParams();
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
-    setValue,
     control,
+    reset,
+    formState: { errors, isSubmitting },
   } = useForm({
-    resolver: yupResolver(schema)
-
+    defaultValues: studentData || {},
   });
-  const navigate = useNavigate();
-  const [apiData, setApiData] = useState([]);
 
-  //Fetch by Id
-  const { id } = useParams();
   useEffect(() => {
-    let fetchData = async () => {
-      await studentByIdService(id).then((response) => {
-        setApiData(response.data);
-      });
+    const fetchData = async () => {
+      try {
+        const [studentResponse, courseResponse] = await Promise.all([
+          studentByIdService(id),
+          courseService(),
+        ]);
+        if (studentResponse?.data) {
+          setStudentData(studentResponse.data);
+          reset(studentResponse.data);
+        } else {
+          navigate("/error");
+        }
+
+        if (courseResponse?.data) {
+          setCourseList(courseResponse.data);
+        }
+      } catch (error) {
+        toast.error("Failed to load student data");
+        console.error("Error fetching data:", error);
+      } finally {
+      }
     };
+
     fetchData();
-  }, []);
-
-  //Course List Fetch
-  const [courseList, setCourseList] = useState([]);
-  useEffect(() => {
-    let courseData = () => {
-      courseService().then((response) => {
-        setCourseList(response.data);
-      });
-    };
-    courseData();
-  }, [apiData]);
-
-  //Gender list Fetch
-  const [genderList, setGenderList] = useState([]);
-  useEffect(() => {
-    let genderData = () => {
-   
-    };
-    genderData();
-  }, [apiData]);
-
-  // to set the incoming value to the respective fields
-  const [initialValue, setInitialValue] = useState({
-    id: 0,
-    firstName: "",
-    lastName: "",
-    birthDate: "",
-    courseId: 0,
-    genderId: 0,
-    emailAddress:"",
-    phoneNumber:""
-  });
-
-  useEffect(() => {
-    setInitialValue({
-      id: apiData?.id,
-      firstName: apiData?.firstName || "",
-      lastName: apiData?.lastName || "",
-      birthDate: apiData?.birthDate || "",
-      courseId: apiData?.courseId || "",
-      genderId: apiData?.genderId || "",
-      emailAddress: apiData?.emailAddress || "",
-      phoneNumber: apiData?.phoneNumber || "",
-    });
-  }, [apiData]);
-  useEffect(() => {
-    // Use setValue to set values for each input field
-    setValue("id", initialValue.id);
-    setValue("firstName", initialValue.firstName);
-    setValue("lastName", initialValue.lastName);
-    setValue("genderId", initialValue.genderId);
-    setValue("courseId", initialValue.courseId);
-    setValue("birthDate", initialValue.birthDate);
-  }, [initialValue]);
-
-  const handleBirthDate = (data) => setValue("birthDate", data);
+  }, [id, navigate, reset]);
 
   const onSubmit = async (data) => {
     try {
-      ;
       if (isSubmitting) return;
-      const response = await editStudentService(data);
-      if (response.status === true) {
-        toast.success(response.message, {
-          autoclose: 1000,
-        });
+      const response = await editStudentService(id, data);
+      if (response.status) {
+        toast.success(response.message, { autoclose: 1000 });
         navigate("/Admin/Student");
-      } else if (response.status === false) {
-        toast.error(response.message, {
-          autoclose: 1000,
-        });
+      } else {
+        toast.error(response.message, { autoclose: 1000 });
       }
     } catch (error) {
-      toast.error(error.message);
+      toast.error("Student update failed!", { autoClose: 3000 });
     }
   };
+
   return (
-    <>
-      <CssBaseline />
-      <Container maxWidth="xl">
-        <Toolbar
+    <div className="form-cover">
+      <Stack direction="row" alignItems="center" spacing={2} mb={4}>
+        <Avatar
           sx={{
-            flexDirection: `row`,
-            borderRadius: "20px",
-            justifyContent: "space-between",
-            padding: "10px",
-            alignItems: "flex-start",
-            background: "white",
-            marginBottom: "10px",
+            bgcolor: "primary.light",
+            color: "primary.dark",
+            width: 56,
+            height: 56,
           }}
         >
-          <Typography variant="h6"> Update</Typography>
-        </Toolbar>
-        <Box
-          sx={{
-            bgcolor: "white",
-            padding: "10px",
-            marginTop: "15px",
-            borderRadius: "20px",
-          }}
-        >
-          <Box
-            component="form"
-            sx={{ padding: `10px` }}
-            onSubmit={handleSubmit(onSubmit)}
-          >
-            <FormGroup sx={{ display: `flex`, flexDirection: `row` }}>
-              <SInputField>
-                <FormControl>
-                  <TextField
-                    required
-                    label="First Name"
-                    {...register("firstName", { required: true })}
-                    value={initialValue.firstName}
-                    onChange={(e) =>
-                      setInitialValue({
-                        ...initialValue,
-                        firstName: e.target.value,
-                      })
-                    }
-                  />
-                </FormControl>
-              </SInputField>
+          <FaUserGraduate size={28} />
+        </Avatar>
+        <div>
+          <Typography variant="h4" fontWeight="bold">
+            Edit Student
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            Update the details of the student
+          </Typography>
+        </div>
+      </Stack>
 
-              <SInputField>
-                <FormControl>
-                  <TextField
-                    label="Last Name"
-                    {...register("lastName")}
-                    value={initialValue.lastName}
-                    onChange={(e) =>
-                      setInitialValue({
-                        ...initialValue,
-                        lastName: e.target.value,
-                      })
-                    }
-                  />
-                </FormControl>
-              </SInputField>
-
-              <SInputField>
-                <DatePicker
-                  label="Return Date"
-                  disablePast
-                  format="YYYY-MM-DD"
-                  name="returnDate"
-                  onChange={handleBirthDate}
-                  value={
-                    initialValue?.returnDate
-                      ? dayjs(initialValue?.returnDate)
-                      : dayjs()
-                  }
+      <Card
+        elevation={4}
+        sx={{
+          borderRadius: 4,
+          boxShadow: "0 8px 16px rgba(0, 0, 0, 0.1)",
+        }}
+      >
+        <CardContent sx={{ p: 4 }}>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <div className="grid grid-cols-2 gap-10">
+              {/* First Name */}
+              <FormControl fullWidth>
+                <TextField
+                  label="First Name"
+                  variant="outlined"
+                  error={!!errors.first_name}
+                  helperText={errors.first_name?.message}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <IoMdPerson color="#1976d2" />
+                      </InputAdornment>
+                    ),
+                  }}
+                  {...register("first_name")}
                 />
-              </SInputField>
+              </FormControl>
 
-              <SInputField>
-                <FormControl fullWidth>
-                  <InputLabel id="Course">Course</InputLabel>
-                  <Select
-                    labelId="Course"
-                    id="Course-select"
-                    label="Course"
-                    {...register("courseId")}
-                    value={initialValue.courseId}
-                    onChange={(e) =>
-                      setInitialValue({
-                        ...initialValue,
-                        courseId: e.target.value,
-                      })
-                    }
-                  >
-                    {courseList.map((item, index) => (
-                      <MenuItem key={index} value={item.id}>
-                        {item.courseName}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              </SInputField>
+              {/* Last Name */}
+              <FormControl fullWidth>
+                <TextField
+                  label="Last Name"
+                  variant="outlined"
+                  error={!!errors.last_name}
+                  helperText={errors.last_name?.message}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <IoMdPerson color="#1976d2" />
+                      </InputAdornment>
+                    ),
+                  }}
+                  {...register("last_name")}
+                />
+              </FormControl>
 
-              <SInputField>
-                <FormControl fullWidth>
-                  <InputLabel id="gender">Gender</InputLabel>
+              {/* Date of Birth */}
+              <FormControl fullWidth>
+                <Controller
+                  control={control}
+                  name="dob"
+                  render={({ field: { onChange, value } }) => (
+                    <DatePicker
+                      onChange={onChange}
+                      value={value ? dayjs(value) : null}
+                      label="Date of Birth"
+                      disableFuture
+                      slotProps={{
+                        textField: {
+                          variant: "outlined",
+                          error: !!errors.dob,
+                          helperText: errors.dob?.message,
+                          InputProps: {
+                            startAdornment: (
+                              <InputAdornment position="start">
+                                <IoMdCalendar color="#1976d2" />
+                              </InputAdornment>
+                            ),
+                          },
+                        },
+                      }}
+                    />
+                  )}
+                />
+              </FormControl>
+
+              {/* Course */}
+              <FormControl fullWidth error={!!errors.course_id}>
+                <InputLabel id="course-label">Course</InputLabel>
+                <Controller
+                  name="course_id"
+                  control={control}
+                  defaultValue={studentData?.course_id || ""}
+                  render={({ field }) => (
+                    <Select
+                      {...field}
+                      labelId="course-label"
+                      label="Course"
+                      startAdornment={
+                        <InputAdornment position="start">
+                          <IoMdSchool color="#1976d2" />
+                        </InputAdornment>
+                      }
+                    >
+                      {courseList.map((item) => (
+                        <MenuItem key={item.id} value={item.id}>
+                          {item.name}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  )}
+                />
+
+                <FormHelperText>{errors.course_id?.message}</FormHelperText>
+              </FormControl>
+
+              {/* Gender */}
+              {/* <FormControl fullWidth error={!!errors.gender_id}>
+                  <InputLabel id="gender-label">Gender</InputLabel>
                   <Select
-                    labelId="gender"
-                    id="gender-select"
+                    labelId="gender-label"
                     label="Gender"
-                    {...register("genderId")}
-                    value={initialValue.genderId}
-                    onChange={(e) =>
-                      setInitialValue({
-                        ...initialValue,
-                        genderId: e.target.value,
-                      })
-                    }
+                    error={!!errors.gender_id}
+                    {...register("gender_id")}
                   >
-                    {genderList.map((item, index) => (
-                      <MenuItem key={index} value={item.id}>
+                    {genderList.map((item) => (
+                      <MenuItem key={item.id} value={item.id}>
                         {item.name}
                       </MenuItem>
                     ))}
                   </Select>
-                </FormControl>
-              </SInputField>
-              <SInputField>
-                <FormControl>
-                  <TextField
-                    label="Email"
-                    {...register("emailAddress")}
-                    value={initialValue.emailAddress}
-                    onChange={(e) =>
-                      setInitialValue({
-                        ...initialValue,
-                        emailAddress: e.target.value,
-                      })
-                    }
-                    error={errors?.emailAddress}
-                    helperText={errors?.emailAddress?.message}
-                  />
-                </FormControl>
-              </SInputField>
-              <SInputField>
-                <FormControl>
-                  <TextField
-                    type="text"
-                    InputProps={{
-                      endAdornment: null,
-                    }}
-                    label="Phone No."
-                    {...register("phoneNumber")}
-                    value={initialValue.phoneNumber}
-                    onChange={(e) =>
-                      setInitialValue({
-                        ...initialValue,
-                        phoneNumber: e.target.value,
-                      })
-                    }
-                    error={errors?.phoneNumber}
-                    helperText={errors?.phoneNumber?.message}
-                  />
-                </FormControl>
-              </SInputField>
-            </FormGroup>
+                  <FormHelperText>{errors.gender_id?.message}</FormHelperText>
+                </FormControl> */}
 
-            <Stack
-              direction="row"
-              spacing={2}
-              sx={{ margin: `20px 20px 20px 5px` }}
-            >
-              <Link to={"/Admin/Student"}>
+              {/* Phone Number */}
+              <FormControl fullWidth>
+                <TextField
+                  label="Phone Number"
+                  variant="outlined"
+                  error={!!errors.phone_number}
+                  helperText={errors.phone_number?.message}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <IoMdCall color="#1976d2" />
+                      </InputAdornment>
+                    ),
+                  }}
+                  {...register("phone_number")}
+                />
+              </FormControl>
+
+              {/* Email */}
+              <FormControl fullWidth>
+                <TextField
+                  label="Email"
+                  variant="outlined"
+                  error={!!errors.email_address}
+                  helperText={errors.email_address?.message}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <IoMdMail color="#1976d2" />
+                      </InputAdornment>
+                    ),
+                  }}
+                  {...register("email_address")}
+                />
+              </FormControl>
+            </div>
+
+            <Divider sx={{ my: 4 }} />
+            <Stack direction="row" spacing={2} justifyContent="flex-end" mt={4}>
+              <Link to="/Admin/Student" style={{ textDecoration: "none" }}>
                 <Button
                   variant="outlined"
                   color="error"
-                  endIcon={<IoIosArrowRoundBack />}
+                  startIcon={<IoIosArrowRoundBack />}
+                  sx={{ px: 3 }}
                 >
-                  Back
+                  Cancel
                 </Button>
               </Link>
+
               <Button
                 type="submit"
                 variant="contained"
-                color="success"
-                size="small"
+                color="primary"
+                disabled={isSubmitting}
+                startIcon={<IoMdSchool />}
+                sx={{ px: 4, py: 1 }}
               >
-                Submit
+                {isSubmitting ? "Updating Student..." : "Update Student"}
               </Button>
             </Stack>
-          </Box>
-        </Box>
-      </Container>
-    </>
+          </form>
+        </CardContent>
+      </Card>
+    </div>
   );
 }
