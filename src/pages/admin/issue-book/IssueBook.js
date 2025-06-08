@@ -14,7 +14,7 @@ import { getAllBooks } from '../../../services/apiServices/book/bookServices';
 import { studentService } from '../../../services/apiServices/student/studentService';
 import { DatePicker } from '@mui/x-date-pickers';
 
-export default function CreateRentBook() {
+export default function IssueBook() {
     const { register, handleSubmit, formState: { errors, isSubmitting },setValue } = useForm();
     
     const navigate = useNavigate();

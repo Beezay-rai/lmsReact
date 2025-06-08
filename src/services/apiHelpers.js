@@ -17,7 +17,7 @@ export const urls = {
   studentUrl: `${baseUrl}/v1/students`,
   bookCategoryUrl: `${baseUrl}/v1/book-categories`,
   bookUrl: `${baseUrl}/v1/books`,
-  transactionUrl: `${baseUrl}/v1/transaction`,
+  issueBookUrl: `${baseUrl}/v1/transaction`,
   dashboardUrl: `${baseUrl}/dashboard`,
 };
 
@@ -86,8 +86,8 @@ export const googleSignUpApi = (method, url, data) =>
   apiRequest(method, `${baseUrl}${url}`, data);
 export const courseApi = (method, url, data) =>
   apiRequest(method, `${urls.courseUrl}${url}`, data, true);
-export const transactionApi = (method, url, data) =>
-  apiRequest(method, `${urls.transactionUrl}${url}`, data, true);
+export const issueBookApi = (method, url, data) =>
+  apiRequest(method, `${urls.issueBookUrl}${url}`, data, true);
 export const bookApi = (method, url, data) =>
   apiRequest(method, `${urls.bookUrl}${url}`, data, true);
 export const studentApi = (method, url, data) =>

@@ -145,9 +145,9 @@ const { open } = useMyDialog();
             index={2}
           />
           <MenuItem
-            label="Transaction"
+            label="Issue Book"
             icon={<MdBook />}
-            to="/Admin/Transaction"
+            to="/Admin/IssuedBookList"
             index={3}
           />
         </List>

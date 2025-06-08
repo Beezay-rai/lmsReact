@@ -7,7 +7,7 @@ import { SInputField } from '../../../components/styles/Styles';
 import { IoIosArrowRoundBack } from 'react-icons/io'
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
-import { createTransactionService, editTransactionService, transactionByIdService } from '../../../services/apiServices/transaction/transactionServices';
+import { createTransactionService, editTransactionService, transactionByIdService } from '../../../services/apiServices/issue-book/issueBookService';
 import { toast } from 'react-toastify';
 import { useState, useEffect } from 'react';
 import { getAllBooks } from '../../../services/apiServices/book/bookServices';
@@ -18,7 +18,7 @@ import dayjs from 'dayjs';
 
 
 
-export default function EditRentBook() {
+export default function EditIssueBook() {
 
     const navigate = useNavigate();
     const [bookList, setBookList] = useState([]);

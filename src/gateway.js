@@ -18,14 +18,15 @@ import Home from "./pages/admin/home/Home";
 import Error from "./pages/shared/Error";
 import BookIndex from "./pages/admin/book/BookIndex";
 import NotFound from "./pages/shared/NotFound";
-import RentBookIndex from "./pages/admin/rent-book/RentBookIndex";
-import CreateRentBook from "./pages/admin/rent-book/Create";
-import EditRentBook from "./pages/admin/rent-book/Edit";
+
 import { store } from "./redux/store";
 import MySpinner from "./components/ui/MySpinner";
 import { useSelector } from "react-redux";
 import BookCategoryIndex from "./pages/admin/book-category/BookCategoryIndex";
 import EditBookCategory from "./pages/admin/book-category/Edit";
+import IssuedBookList from "./pages/admin/issue-book/IssuedBook-list";
+import IssueBook from "./pages/admin/issue-book/IssueBook";
+import EditIssueBook from "./pages/admin/issue-book/Edit";
 
 export default function Gateway() {
 
@@ -71,16 +72,16 @@ export default function Gateway() {
         <Route exact path="/Admin/Book/Edit/:id" element={<EditBook />} />
 
         {/* Transaction */}
-        <Route exact path="/Admin/Rent-Book" element={<RentBookIndex />} />
+        <Route exact path="/Admin/IssuedBookList" element={<IssuedBookList />} />
         <Route
           exact
-          path="/Admin/Rent-book/Create"
-          element={<CreateRentBook />}
+          path="/Admin/IssueBook/Create"
+          element={<IssueBook />}
         />
         <Route
           exact
-          path="/Admin/Rent-Book/Edit/:id"
-          element={<EditRentBook />}
+          path="/Admin/IssueBook/Edit/:id"
+          element={<EditIssueBook />}
         />
       </Route>
     </Routes>

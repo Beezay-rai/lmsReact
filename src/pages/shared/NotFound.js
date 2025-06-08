@@ -14,7 +14,7 @@ export default function NotFound() {
       }}
     >
       <Container maxWidth="md">
-        <Grid container spacing={2}>
+        <Grid container sx={{flexWrap:"nowrap"}} spacing={2}>
           <Grid xs={6}>
             <Typography variant="h1">404</Typography>
             <Typography variant="h6">
