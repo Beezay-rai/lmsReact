@@ -57,7 +57,7 @@ export default function EditBook() {
       try {
         const response = await getBookById(id);
         if (response.status) {
-          debugger;
+          ;
           reset(response.data);
         }
       } catch {

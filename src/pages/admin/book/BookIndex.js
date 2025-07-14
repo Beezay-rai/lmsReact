@@ -71,7 +71,7 @@ export default function BookIndex() {
   };
 
   const handleDelete = async (id) => {
-    debugger;
+    ;
     dispatch(setIsLoading(true));
     try {
       const response = await deleteBook(id);

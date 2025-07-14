@@ -7,11 +7,11 @@ import { SInputField } from '../../../components/styles/Styles';
 import { IoIosArrowRoundBack } from 'react-icons/io'
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
-import { createTransactionService, editTransactionService, transactionByIdService } from '../../../services/apiServices/issue-book/issueBookService';
+import { createTransactionService, editIssueBookService, getIssueBookByIdService, transactionByIdService } from '../../../services/apiServices/issue-book/issueBookService';
 import { toast } from 'react-toastify';
 import { useState, useEffect } from 'react';
 import { getAllBooks } from '../../../services/apiServices/book/bookServices';
-import { studentService } from '../../../services/apiServices/student/studentService';
+import { getAllStudentService, studentService } from '../../../services/apiServices/student/studentService';
 import { DatePicker } from '@mui/x-date-pickers';
 import dayjs from 'dayjs';
 
@@ -30,7 +30,7 @@ export default function EditIssueBook() {
     const { id } = useParams();
     useEffect(() => {
         let fetchData = async () => {
-            await transactionByIdService(id)
+            await getIssueBookByIdService(id)
                 .then((response) => {
                     setApiData(response.data);
                 })
@@ -42,7 +42,7 @@ export default function EditIssueBook() {
     useEffect(() => {
         if (apiData.id > 0) {
             let studentData = async () => {
-                await studentService().then((response) => {
+                await getAllStudentService().then((response) => {
                     setStudentList(response.data)
                 })
             }
@@ -101,7 +101,7 @@ export default function EditIssueBook() {
     const onSubmit = async (data) => {
         try {
             if (isSubmitting) return;
-            const response = await editTransactionService(data);
+            const response = await editIssueBookService(data);
             if (response.status === true) {
                 toast.success(response.message, {
                     autoclose: 1000,

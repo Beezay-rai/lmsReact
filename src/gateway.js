@@ -75,7 +75,7 @@ export default function Gateway() {
         <Route exact path="/Admin/IssuedBookList" element={<IssuedBookList />} />
         <Route
           exact
-          path="/Admin/IssueBook/Create"
+          path="/IssueBook/Create"
           element={<IssueBook />}
         />
         <Route

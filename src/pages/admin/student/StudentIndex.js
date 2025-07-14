@@ -31,6 +31,7 @@ import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import {
   deleteStudentService,
+  getAllStudentService,
   studentService,
 } from "../../../services/apiServices/student/studentService";
 import { setDialogState, setIsLoading } from "../../../redux/appSlices";
@@ -63,7 +64,7 @@ const { open } = useMyDialog();
   const fetchStudents = async () => {
     setLoading(true);
     try {
-      const response = await studentService();
+      const response = await getAllStudentService();
       if (response?.status) {
         setStudentList(response.data);
       } else {

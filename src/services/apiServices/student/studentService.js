@@ -1,6 +1,6 @@
 import { studentApi } from "../../apiHelpers";
 
-export const studentService = async ()=>{
+export const getAllStudentService = async ()=>{
     let response = await studentApi(
      "GET",
         ""

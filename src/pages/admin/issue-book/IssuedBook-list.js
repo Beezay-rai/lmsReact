@@ -30,8 +30,8 @@ import { setDialogState, setIsLoading } from "../../../redux/appSlices.js";
 import MySpinner from "../../../components/ui/MySpinner.jsx";
 import {
   deleteTransactionService,
-  transactionService,
   returnTransactionService,
+  getIssueBookListService,
 } from "../../../services/apiServices/issue-book/issueBookService.js";
 import { IoMdBook } from "react-icons/io";
 import { useMyDialog } from "../../../components/context/MyDialogContext.tsx";
@@ -82,11 +82,11 @@ export default function IssuedBookList() {
   const fetchTransactions = async () => {
     setLoading(true);
     try {
-      const response = await transactionService();
+      const response = await getIssueBookListService();
       if (response?.status) {
         setApiData(response.data);
       } else {
-        toast.error("Failed to fetch transactions.");
+        toast.error("Error Occured !.");
         setApiData([]);
       }
     } catch (error) {
@@ -154,10 +154,10 @@ export default function IssuedBookList() {
     }
   };
 
-  const filteredTransactions = apiData.filter(
+  const filteredList = apiData.filter(
     (transaction) =>
-      transaction.issuedDate.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      transaction.id.toString().includes(searchTerm)
+      transaction?.student_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      transaction?.id.toString().includes(searchTerm)
   );
 
   return (
@@ -177,7 +177,7 @@ export default function IssuedBookList() {
             Issue Book
           </Typography>
 
-          <Link to="/Rent-Book/Create" style={{ textDecoration: "none" }}>
+          <Link to="/IssueBook/Create" style={{ textDecoration: "none" }}>
             <Button
               variant="contained"
               color="primary"
@@ -245,7 +245,7 @@ export default function IssuedBookList() {
                     <MySpinner />
                   </TableCell>
                 </TableRow>
-              ) : filteredTransactions.length === 0 ? (
+              ) : filteredList.length === 0 ? (
                 <TableRow>
                   <TableCell colSpan={4} align="center" sx={{ py: 5 }}>
                     <Typography variant="body1" color="textSecondary">
@@ -256,7 +256,7 @@ export default function IssuedBookList() {
                   </TableCell>
                 </TableRow>
               ) : (
-                filteredTransactions
+                filteredList
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((item, index) => (
                     <TableRow
@@ -274,7 +274,7 @@ export default function IssuedBookList() {
                       <TableCell>
                         <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
                           <Avatar sx={{ bgcolor: "primary.main" }}>
-                            {item.issuedDate.charAt(0)}
+                            {item.student_name.charAt(0)}
                           </Avatar>
                           <Typography fontWeight={500}>{item.issuedDate}</Typography>
                         </Box>
@@ -316,7 +316,7 @@ export default function IssuedBookList() {
           <TablePagination
             rowsPerPageOptions={[10, 25, 50]}
             component="div"
-            count={filteredTransactions.length}
+            count={filteredList.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={(_, newPage) => setPage(newPage)}
